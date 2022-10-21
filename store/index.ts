@@ -69,16 +69,15 @@ export const timeMarkerWeightMinimum = 0.25
 const MOSTLEFTDATE = DateTime.now().startOf("day")
 
 const MARDKERS = [
-  "table 1",
-  "table 2",
-  "table 3",
-  "table 1",
-  "table 2",
-  "table 3",
-  "table 1",
-  "table 2",
-  "table 3",
-  "table 4",
+  "meta",
+  "system",
+  "test/foo",
+  "test/bar",
+  "test/baz",
+  "hackathon/happy",
+  "hackathon/lucky",
+  "hackathon/fun",
+  "default",
 ]
 
 let currentTimelineName = ""
@@ -672,6 +671,7 @@ export const getters: GetterTree<State, State> = {
         markers[markers.length - 1].dateTime,
         nextLeft
       )
+      markerIndex++
     }
 
     // Get the last one

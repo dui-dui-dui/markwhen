@@ -37,8 +37,8 @@
           @startResizeLeft="startResizeLeft"
           @startResizeRight="startResizeRight"
         />
-        <p class="eventDate">{{ event.getDateHtml() }}</p>
-        <svg
+        <!-- <p class="eventDate">{{ event.getDateHtml() }}</p> -->
+        <!-- <svg
           v-if="hasImages && imageStatus !== 'loading'"
           xmlns="http://www.w3.org/2000/svg"
           class="h-4 w-4 ml-2 mb-px"
@@ -83,20 +83,20 @@
           <path
             d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
           ></path>
-        </svg>
-        <p class="eventTitle ml-2">
+        </svg> -->
+        <!-- <p class="eventTitle ml-2">
           <span v-html="event.getInnerHtml()"></span>
           <span v-if="hasSupplemental && !showingMeta">...</span>
-        </p>
+        </p> -->
       </div>
     </div>
-    <event-meta
+    <!-- <event-meta
       v-if="canShowMeta"
       :locations="locations"
       :images="images"
       :supplemental="supplemental"
       :photosLink="event.event.googlePhotosLink"
-    />
+    /> -->
   </div>
 </template>
 

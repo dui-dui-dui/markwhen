@@ -11,7 +11,7 @@
           :opacity="alpha(timeMarker.dateTime)"
           :width="timeMarker.size"
           :borderColor="borderColorForDateTime(timeMarker.dateTime)"
-          :backgroundColor="backgroundColorForDateTime(timeMarker.dateTime)"
+          :backgroundColor="backgroundColorForDateTime(timeMarker.schema)"
         />
       </div>
     </div>
@@ -65,15 +65,14 @@ export default Vue.extend({
       const a = this.timeMarkerWeights[this.scaleForDate(dateTime)];
       return a;
     },
-    backgroundColorForDateTime(dateTime: DateTime) {
+    backgroundColorForDateTime(schema: string) {
       if (this.timeMarkerWeights[2]) {
-        const weekday = getWeekday(dateTime);
         const isDark = this["sidebar/darkMode"] === "dark";
         const a = this.timeMarkerWeights[3] * 0.1;
-        if (weekday === 6 || weekday === 7) {
+        if (schema == "meta" || schema == "system" || schema == "default") {
           return isDark
-            ? `rgba(30, 30, 30, ${a})`
-            : `rgba(170, 170, 170, ${a})`;
+            ? `rgba(60, 60, 30, ${a})`
+            : `rgba(200, 200, 0, ${a})`;
         }
       }
     },
