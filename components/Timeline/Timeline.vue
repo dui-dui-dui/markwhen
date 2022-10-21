@@ -77,7 +77,7 @@ export default Vue.extend({
   },
   mounted() {
     this.touchScreenListener();
-    this.setupZoomer();
+    // this.setupZoomer();
     this.setViewportDateInterval();
     if (this.$store.state.editable) {
       window.addEventListener("mousemove", this.moveListener);

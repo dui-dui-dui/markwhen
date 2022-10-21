@@ -11,9 +11,9 @@
         text-gray-900
       "
     >
-      <template v-if="$store.state.editable">
+      <!-- <template v-if="$store.state.editable">
         <sidebar v-show="$store.state.sidebar.visible"
-      /></template>
+      /></template> -->
       <timeline />
     </div>
   </div>

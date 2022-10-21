@@ -15,6 +15,7 @@
           :key="timeMarker.ts"
           :dateTime="timeMarker.dateTime"
           :size="timeMarker.size"
+          :schema="timeMarker.schema"
         />
       </div>
     </div>

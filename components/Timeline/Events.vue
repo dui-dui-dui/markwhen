@@ -2,14 +2,14 @@
   <div
     id="events"
     class="flex flex-col relative"
-    :style="`min-width: ${distanceBetweenBaselineDates}px;`"
+    :style="`min-width: 100vh;`"
   >
     <div class="h-24"></div>
-    <div
+    <!-- <div
       v-if="shouldShowNow"
       class="absolute h-full dark:bg-slate-400 bg-blue-300"
       :style="`width: 1px; left: ${distanceFromBaselineLeftmostDate(now)}px`"
-    ></div>
+    ></div> -->
     <template v-for="event in filteredEvents">
       <template v-if="Array.isArray(event)">
         <event-group
@@ -59,7 +59,7 @@
         +
       </button>
     </div>
-    <div style="height: 90vh"></div>
+    <!-- <div style="height: 90vh"></div> -->
   </div>
 </template>
 

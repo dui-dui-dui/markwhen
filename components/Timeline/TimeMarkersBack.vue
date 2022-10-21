@@ -46,7 +46,7 @@ export default Vue.extend({
   props: ["markers"],
   data() {
     return {
-      leftMargin: viewportLeftMarginPixels,
+      leftMargin: 0,
     };
   },
   computed: {

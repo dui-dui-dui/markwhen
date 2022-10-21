@@ -50,7 +50,7 @@ export default {
   ],
 
   serverMiddleware: {
-    "/": "~/server-middleware/index",
+    // "/": "~/server-middleware/index",
   },
 
   // Modules: https://go.nuxtjs.dev/config-modules

@@ -23,7 +23,7 @@ import { clamp, dateScale, timeMarkerWeightMinimum } from "~/store";
 import { granularities } from "~/src/DateTimeDisplay";
 
 export default Vue.extend({
-  props: ["dateTime", "size"],
+  props: ["dateTime", "size", "schema"],
   computed: {
     ...mapGetters(["timeMarkerWeights"]),
     scaleForThisDate(): number {
@@ -53,6 +53,8 @@ export default Vue.extend({
       return granularities[this.currentDateResolution][this.scaleForThisDate](
         this.dateTime
       );
+
+      // return this.schema
     },
   },
 });
