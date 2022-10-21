@@ -440,6 +440,10 @@ export const getters: GetterTree<State, State> = {
   },
   filteredEvents(state: State, getters: any): Events {
     const events = getters.events as Events;
+    // const _events = getPlacementRules()
+    // const events = placementRuleSchemaMap(_events)
+    console.log('in filteredEvents', events)
+
     const filter = state.settings[state.cascadeIndex].filter;
     if (filter.length === 0) {
       return events;

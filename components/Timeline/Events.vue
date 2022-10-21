@@ -78,15 +78,15 @@ export default Vue.extend({
     now(): DateTime {
       return DateTime.now();
     },
-    shouldShowNow(): boolean {
-      if (this.$store.state.sidebar.hideNowLine) {
-        return false;
-      }
-      return (
-        this.now > (this.baselineLeftmostDate as DateTime) &&
-        this.now < (this.baselineRightmostDate as DateTime)
-      );
-    },
+    // shouldShowNow(): boolean {
+    //   if (this.$store.state.sidebar.hideNowLine) {
+    //     return false;
+    //   }
+    //   return (
+    //     this.now > (this.baselineLeftmostDate as DateTime) &&
+    //     this.now < (this.baselineRightmostDate as DateTime)
+    //   );
+    // },
     ...mapGetters([
       "distanceBetweenBaselineDates",
       "filteredEvents",
