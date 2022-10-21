@@ -23,9 +23,7 @@ export default Vue.extend({
       });
     }
     return {
-      title: this.metadata.title
-        ? `${this.metadata.title} - Cascade.page`
-        : `Cascade.page`,
+      title: "Placement Rules",
       meta,
     };
   },
