@@ -16,8 +16,10 @@
       :eventType="eventType"
     />
     <TimeMarkersFront :markers="markers" />
-    <drawer-header />
-    <resize-observer @notify="handleResize" />
+    <template class="mt-10">
+      <drawer-header />
+      <resize-observer @notify="handleResize" />
+    </template>
   </div>
 </template>
 
