@@ -95,6 +95,11 @@ export default Vue.extend({
       "baselineRightmostDate",
     ]),
   },
+  watch: {
+    filteredEvents(val) {
+      console.log(val, 'filteredEvents')
+    }
+  },
   methods: {
     clic() {
       console.log("click");

@@ -151,9 +151,14 @@
             </svg>
           </button>
         </div>
+        <a-button class="noBorder mr-2" type="" @click="handleClick">CreateGroup</a-button>
+        <a-button class="noBorder" type="" @click="handleClickRule">Rule Config</a-button>
         <tags></tags>
       </div>
     </div>
+    <GroupModal ref="GroupModal"></GroupModal>
+    <RuleFormModal ref="RuleFormModal"></RuleFormModal>
+
   </div>
 </template>
 
@@ -164,6 +169,8 @@ import Vue from "vue";
 import Sort from "./Sort.vue";
 import { mapGetters } from "vuex";
 import CascadeButtons from "./CascadeButtons.vue";
+import GroupModal from './GroupModal.vue'
+import RuleFormModal from './RuleFormModal.vue'
 
 export default Vue.extend({
   components: {
@@ -171,6 +178,8 @@ export default Vue.extend({
     DisplaySettings,
     Sort,
     CascadeButtons,
+    GroupModal,
+    RuleFormModal
   },
   computed: {
     ...mapGetters(["metadata", "sidebar/darkMode"]),
@@ -183,6 +192,12 @@ export default Vue.extend({
   },
   props: ["value", "timelinePath"],
   methods: {
+    handleClick() {
+      (this.$refs.GroupModal as Vue & {showModal:Function}).showModal()
+    },
+    handleClickRule() {
+      (this.$refs.RuleFormModal as Vue & {showModal:Function}).showModal()
+    },
     toggleSidebar() {
       this.$store.commit("sidebar/toggle");
     },
@@ -219,5 +234,8 @@ export default Vue.extend({
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+.noBorder {
+  border: 0;
 }
 </style>

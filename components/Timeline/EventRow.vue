@@ -109,7 +109,6 @@ import EventBar from "./EventBar.vue";
 import { DateTime } from "luxon";
 import { roundDateTime } from "~/store";
 import MoveWidgets from "./MoveWidgets.vue";
-
 export const EVENT_HEIGHT_PX = 10;
 
 export default Vue.extend({

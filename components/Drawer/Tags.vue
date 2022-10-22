@@ -39,8 +39,8 @@
           stroke-linejoin="round"
           stroke-width="2"
           d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
-        /></svg
-      ><span>Show all</span>
+        /></svg>
+      <span>Show all</span>
     </button>
     <tag v-for="tag in Object.keys(tags)" :key="tag" :tag="tag"></tag>
     <div class="flex flex-row font-mono text-gray-400" v-if="false">

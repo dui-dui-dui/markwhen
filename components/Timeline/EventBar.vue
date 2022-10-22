@@ -41,7 +41,9 @@ export default Vue.extend({
     ...mapGetters(["distanceFromBaselineLeftmostDate"]),
     tagColor(): string | undefined {
       if (this.event.event.tags[0]) {
-        return this.$store.getters.tags[this.event.event.tags[0]];
+        console.log(this.$store.getters.tags, 'tagColor')
+        // return this.$store.getters.tags[this.event.event.tags[0]];
+        return this.$store.getters.tags['pink'];
       }
       return undefined;
     },
@@ -62,6 +64,7 @@ export default Vue.extend({
     },
     percentBarColorStyle(): string {
       let style = "";
+      console.log(this.tagColor, 'this.tagColor1')
       if (this.tagColor) {
         style += ` background-color: rgba(${this.tagColor}, 0.8)`;
       }

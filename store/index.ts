@@ -38,6 +38,7 @@ interface State {
   editorGetter: () => EditorView | undefined;
   hoveringEvent: Event | null;
   choosingColor: boolean;
+  colors: Tags
 }
 
 interface DateInterval {
@@ -89,6 +90,13 @@ export interface Settings {
   sort: Sort;
   filter: string[];
 }
+const colors: Tags = {
+  pink: 'pink',
+  primary: '#1890ff',
+  success: '#52c41a',
+  warning: '#faad14',
+  error: '#f5222d'
+}
 
 export const state: () => State = () => ({
   list: list,
@@ -106,6 +114,7 @@ export const state: () => State = () => ({
   editorGetter: () => undefined,
   hoveringEvent: null as Event | null,
   choosingColor: false,
+  colors: colors
 });
 
 export type DisplayScale =
@@ -142,6 +151,7 @@ interface Viewport {
   width: number;
   top: number;
 }
+
 
 const diffScale = "days";
 
@@ -478,7 +488,9 @@ export const getters: GetterTree<State, State> = {
     return filtered;
   },
   tags(state: State, getters: any): Tags {
-    return getters.cascade.tags;
+    // console.log(getters.cascade.tags, 'getters.colors')
+    // return getters.cascade.tags;
+    return state.colors
   },
   metadata(state: State, getters: any): CascadeMetadata {
     return getters.cascade.metadata;
