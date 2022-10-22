@@ -1,17 +1,16 @@
 <template>
-  <div class="relative flex flex-col">
-    <div
+  <div class="relative" :style="`background: rgb(155 155 155 / 30%)`">
+    <!-- <div
       class="
         absolute
-        h-full
-        flex flex-row
+        h-fit
         items-center
         dark:text-gray-400
         transition
       "
       :class="expandedGroupClass"
       :style="expandedGroupStyle"
-    ></div>
+    ></div> -->
     <div
       :style="`margin-left: ${left}px; width: ${this.fullWidth}px;`"
       class="sticky top-8 cursor-pointer"
@@ -38,8 +37,6 @@
           sticky
           px-1
           mt-px
-          dark:bg-opacity-60
-          bg-opacity-20
         "
         :class="buttonClass"
         :style="buttonStyle"
@@ -50,7 +47,9 @@
         </div>
       </button>
     </div>
+    <div class="h-5"></div>
   </div>
+
 </template>
 
 <script lang="ts">
@@ -73,9 +72,10 @@ export default Vue.extend({
       const background = this.rgb
         ? `background-color: rgba(${this.rgb}, 0.25); `
         : "";
-      return this.isGroupStyleTight
-        ? `left: calc(50% - ${this.buttonWidth / 2}px); ${background}`
-        : `left: 1rem; ${background}`;
+        return ''
+      // return this.isGroupStyleTight
+      //   ? `left: calc(50% - ${this.buttonWidth / 2}px); ${background}; height: 50px; `
+      //   : `left: 1rem; ${background}; height: 50px`;
     },
     buttonWidth(): number {
       // This whole thing is slightly messed up.

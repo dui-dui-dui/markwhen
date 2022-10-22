@@ -4,7 +4,7 @@
     class="flex flex-col relative"
     :style="`min-width: 100vh;`"
   >
-    <div class="h-24"></div>
+    <div class="h-14"></div>
     <!-- <div
       v-if="shouldShowNow"
       class="absolute h-full dark:bg-slate-400 bg-blue-300"

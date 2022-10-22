@@ -1,6 +1,5 @@
 <template>
   <div
-    class="eventRow relative"
     :style="eventRowStyle"
   >
     <div class="flex flex-row">
@@ -109,7 +108,7 @@ export default Vue.extend({
       const leftMargin = this.distanceFromBaselineLeftmostDate(
         this.tempFrom ? this.tempFrom : this.event.ranges.date.fromDateTime
       );
-      return `margin-left: ${leftMargin}px;`;
+      return `margin-left: ${leftMargin}px; position: absolute`;
     },
     photoBarClass(): string {
       let c = "photoBar transition rounded-lg shadow ";
@@ -349,10 +348,10 @@ export default Vue.extend({
 .photoBar {
   width: 10px;
 }
-.eventRow {
+/* .eventRow {
   padding-top: 2px;
   padding-bottom: 20px;
-}
+} */
 
 .eventDate {
   color: #93979a;

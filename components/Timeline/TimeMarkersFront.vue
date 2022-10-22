@@ -4,11 +4,7 @@
       <div class="flex h-full" :style="`margin-left: -${leftMargin}px`">
         <div
           class="timeMarkerShader w-full h-12 fixed top-0"
-          :style="`margin-left: ${leftMargin}px; background: linear-gradient(${
-            darkMode === 'dark'
-              ? 'to bottom, #384047, 65%, #38404700'
-              : 'to bottom, rgb(241 245 249), 65%, #ffffff00'
-          })`"
+          :style="`margin-left: ${leftMargin}px;`"
         ></div>
         <time-marker-front
           v-for="timeMarker in markers"
