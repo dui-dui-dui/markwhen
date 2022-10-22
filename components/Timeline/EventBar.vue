@@ -6,7 +6,7 @@
       class="absolute left-0 top-0 bottom-0 rounded-full percentBar transition"
       :class="percentBarColorClass"
       :style="`min-width: 10px; max-width: 100%; ${percentBarColorStyle}; width: ${percent}%;`"
-    >{{ event.event.eventDescription }}</div>
+    >{{ ruleDescription }}</div>
     <drag-handle
       v-if="$store.state.editable && hovering"
       @startResize="startResizeLeft"
@@ -23,7 +23,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Event } from "~/src/Types";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import DragHandle from "./DragHandle.vue";
 
 export default Vue.extend({
@@ -39,6 +39,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters(["distanceFromBaselineLeftmostDate"]),
+    ...mapState({groups: (state: any) => state.groups }),
     tagColor(): string | undefined {
       if (this.event.event.tags[0]) {
         console.log(this.$store.getters.tags, 'tagColor', this.event.event.tags[0])
@@ -63,11 +64,37 @@ export default Vue.extend({
       }
       return c;
     },
+    rule(): any {
+      for (const g of this.groups) {
+        for (const r of g.rules) {
+          if (r.id === this.event.event.eventDescription) {
+            return r;
+          }
+        }
+      }
+    },
+    ruleDescription(): string {
+      let suffix = "";
+      if (this.rule.count > 1) {
+        suffix = "s";
+      }
+      return this.rule.id + " (" + this.rule.count + " " + this.rule.role + suffix + ")";
+    },
     percentBarColorStyle(): string {
       let style = "color: white; text-align: center;";
       if (this.tagColor) {
         style += ` background-color: rgba(${this.tagColor}, 0.8)`;
       }
+      if (this.rule.role === "leader") {
+        style += ` background-color: rgba(150,150,0,0.8)`;
+      } else if (this.rule.role == "follower") {
+        style += ` background-color: rgba(0,50,100,0.8)`;
+      } else if (this.rule.role == "voter") {
+        style += ` background-color: rgba(20,100,80,0.8)`;
+      } else if (this.rule.role === "learner") {
+        style += ` background-color: rgba(255,0,0,0.8)`;
+      }
+
       return style;
     },
     eventBarClass(): string {
