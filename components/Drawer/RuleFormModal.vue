@@ -89,6 +89,7 @@ export default {
       let groups = JSON.parse(JSON.stringify(this.groups))
       const group = groups.filter(item => item.group_id == title)[0]
       const rule = group.rules.filter(item => item.id == record.event.eventDescription)
+      console.log(rule, 'group', record.event.eventDescription)
       this.title = title
       this.rowName = record.event.eventDescription
       this.form = rule[0] || {}
@@ -109,35 +110,38 @@ export default {
     handleOk() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          const validTask = this.$refs.subForm.map(form=>form.onValid())
-          Promise.all(validTask).then(subFormData=>{
-            let subForm = subFormData.map(item => {
-              return {
-                key: item.key,
-                op: item.op,
-                value: item.value
-              }
+          const data = {
+            ...this.form,
+          }
+          if (this.$refs.subForm) {
+            const validTask = this.$refs.subForm.map(form=>form.onValid())
+            console.log(validTask, 'validTask')
+            Promise.all(validTask).then(subFormData=> {
+              let subForm = subFormData.map(item => {
+                return {
+                  key: item.key,
+                  op: item.op,
+                  value: item.value
+                }
+              })
+              data.subForm = subForm
             })
-            const data = {
-              ...this.form,
-              subForm: subForm
+          }
+          let groups = JSON.parse(JSON.stringify(this.groups))
+          let newGroups = groups.map(item => {
+            if (item => item.group_id == this.title) {
+              item.rules = item.rules.map(ele => {
+                if (ele.id == this.rowName) {
+                  return data
+                } else {
+                  return ele
+                }
+              })
             }
-            let groups = JSON.parse(JSON.stringify(this.groups))
-            let newGroups = groups.map(item => {
-              if (item => item.group_id == this.title) {
-                item.rules = item.rules.map(ele => {
-                  if (ele.id == this.rowName) {
-                    return data
-                  } else {
-                    return ele
-                  }
-                })
-              }
-              return item
-            })
-            this.$store.commit("setGroups", newGroups)
-            this.handleCancel()
+            return item
           })
+          this.$store.commit("setGroups", newGroups)
+          this.handleCancel()
         } 
       });
       

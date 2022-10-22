@@ -8,10 +8,16 @@
     @cancel="handleCancel"
   >
     <a-form-model :model="form" ref="form" :label-col="labelCol" :wrapper-col="wrapperCol">
-      <a-form-model-item label="Group name">
+      <a-form-model-item label="Group name" prop="name">
         <a-input v-model="form.name" />
       </a-form-model-item>
-      <a-form-model-item label="schemas">
+      <a-form-model-item label="Event name" prop="eventName">
+        <a-input v-model="form.eventName" />
+      </a-form-model-item>
+      <a-form-model-item label="Override" prop="override">
+        <a-switch v-model="form.override" />
+      </a-form-model-item>
+      <!-- <a-form-model-item label="schemas">
         <a-select v-model="form.region" placeholder="please select your schemas">
           <a-select-option value="schemas1">
             schemas1
@@ -20,7 +26,7 @@
             schemas2
           </a-select-option>
         </a-select>
-      </a-form-model-item>
+      </a-form-model-item> -->
       <a-form-model-item label="color tag">
         <div class="colorTags">
           <ColorTag v-for="tag in Object.keys(tags)" :key="tag" :tag="tag" :current="form.tag" @filterTag="filterTag"></ColorTag>
@@ -52,7 +58,7 @@ export default {
         delivery: false,
         type: [],
         resource: '',
-        tag: '',
+        tag: 'primary',
       },
       mouseLeft: 0,
       startEventCreationRange: ''
@@ -61,7 +67,10 @@ export default {
   
   computed: {
     ...mapGetters(["tags","rangeFromOffsetLeft"]),
-    ...mapState({ eventsString: (state) => state.eventsString }),
+    ...mapState({
+      eventsString: (state) => state.eventsString,
+      groups: (state) => state.groups
+    }),
     newEventPosition() {
       return this.rangeFromOffsetLeft(this.mouseLeft);
     },
@@ -79,14 +88,31 @@ export default {
       this.$refs.form.resetFields();
     },
     handleOk() {
-
-      // let str = `${this.eventsString}\n group ${this.form.name}`
-
-      // this.$store.commit("setEventsString", str);
       const groupInfo = {
         range: this.newEventPosition,
         ...this.form
       }
+      const group = {
+        "group_id": this.form.name,
+        "group_index": this.groups.length + 1,
+        "group_override": this.form.override,
+        "rules": [
+          {
+            "group_id": this.form.name,
+            "id": this.form.eventName,
+            "index": 0,
+            "override": false,
+            "start_key": "",
+            "end_key": "",
+            "role": "",
+            "count": 1
+          }
+        ]
+      }
+      let groups = JSON.parse(JSON.stringify(this.groups))
+      groups.push(group)
+      console.log(groups, 'groups')
+      this.$store.commit("setGroups", groups)
       this.$store.dispatch("createNewGroup", groupInfo);
       this.handleCancel()
       // console.log(this.newEventPosition, 'newEventPosition')
