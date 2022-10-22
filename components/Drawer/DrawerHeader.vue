@@ -19,7 +19,7 @@
       <cascade-buttons :shadowed="true" />
     </div>
     <div class="flex flex-row items-center" @mousedown="mousedown">
-      <button
+      <!-- <button
         role="button"
         title="Toggle sidebar"
         class="
@@ -87,7 +87,7 @@
             d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
           />
         </svg>
-      </a>
+      </a> -->
       <div
         class="
           flex flex-row
@@ -98,7 +98,7 @@
         "
         style="width: fit-content"
       >
-        <div
+        <!-- <div
           v-if="$store.state.timelinePath"
           class="mr-4"
           style="max-width: 12rem"
@@ -124,10 +124,10 @@
           >
             @{{ $store.state.timelinePath }}
           </a>
-        </div>
+        </div> -->
 
-        <display-settings></display-settings>
-        <div class="pr-3 flex flex-row items-center">
+        <!-- <display-settings></display-settings> -->
+        <!-- <div class="pr-3 flex flex-row items-center">
           <sort></sort>
           <button
             class="pl-1"
@@ -150,14 +150,13 @@
               ></path>
             </svg>
           </button>
-        </div>
+        </div> -->
         <a-button class="noBorder mr-2" type="" @click="handleClick">CreateGroup</a-button>
-        <a-button class="noBorder" type="" @click="handleClickRule">Rule Config</a-button>
-        <tags></tags>
+        <!-- <a-button class="noBorder" type="" @click="handleClickRule">Rule Config</a-button> -->
+        <!-- <tags></tags> -->
       </div>
     </div>
     <GroupModal ref="GroupModal"></GroupModal>
-    <RuleFormModal ref="RuleFormModal"></RuleFormModal>
 
   </div>
 </template>
@@ -170,7 +169,6 @@ import Sort from "./Sort.vue";
 import { mapGetters } from "vuex";
 import CascadeButtons from "./CascadeButtons.vue";
 import GroupModal from './GroupModal.vue'
-import RuleFormModal from './RuleFormModal.vue'
 
 export default Vue.extend({
   components: {
@@ -178,8 +176,7 @@ export default Vue.extend({
     DisplaySettings,
     Sort,
     CascadeButtons,
-    GroupModal,
-    RuleFormModal
+    GroupModal
   },
   computed: {
     ...mapGetters(["metadata", "sidebar/darkMode"]),
@@ -194,9 +191,6 @@ export default Vue.extend({
   methods: {
     handleClick() {
       (this.$refs.GroupModal as Vue & {showModal:Function}).showModal()
-    },
-    handleClickRule() {
-      (this.$refs.RuleFormModal as Vue & {showModal:Function}).showModal()
     },
     toggleSidebar() {
       this.$store.commit("sidebar/toggle");

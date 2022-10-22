@@ -32,7 +32,8 @@
 </template>
 <script>
 import ColorTag from "./ColorTag.vue";
-import { mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
+import { OffsetRange } from "~/store";
 export default {
   components: {
     ColorTag
@@ -53,10 +54,17 @@ export default {
         resource: '',
         tag: '',
       },
+      mouseLeft: 0,
+      startEventCreationRange: ''
     }
   },
+  
   computed: {
-    ...mapGetters(["tags"]),
+    ...mapGetters(["tags","rangeFromOffsetLeft"]),
+    ...mapState({ eventsString: (state) => state.eventsString }),
+    newEventPosition() {
+      return this.rangeFromOffsetLeft(this.mouseLeft);
+    },
   },
   methods: {
     showModal() {
@@ -70,7 +78,22 @@ export default {
       this.visible = false
       this.$refs.form.resetFields();
     },
-    handleOk() {}
+    handleOk() {
+
+      // let str = `${this.eventsString}\n group ${this.form.name}`
+
+      // this.$store.commit("setEventsString", str);
+      const groupInfo = {
+        range: this.newEventPosition,
+        ...this.form
+      }
+      this.$store.dispatch("createNewGroup", groupInfo);
+      this.handleCancel()
+      // console.log(this.newEventPosition, 'newEventPosition')
+      // 
+      // let josn = `[{"eventString":"2022-01/2022-03: Sub task #John","ranges":{"date":{"fromDateTime":"2022-01-01T00:00:00.000+08:00","toDateTime":"0004-01-01T00:00:00.000+08:05","originalString":"01/2022-03","dateRangeInText":{"type":"dateRange","from":104,"to":115}},"event":{"from":104,"to":131,"type":"event"}},"event":{"tags":["John"],"locations":[],"eventDescription":"Sub task","supplemental":[]}},{"eventString":"2022-03/2022-06: Sub task 2 #Michelle","ranges":{"date":{"fromDateTime":"2022-03-01T00:00:00.000+08:00","toDateTime":"0007-01-01T00:00:00.000+08:05","originalString":"03/2022-06","dateRangeInText":{"type":"dateRange","from":136,"to":147}},"event":{"from":136,"to":268,"type":"event"}},"event":{"tags":["Michelle"],"locations":[],"eventDescription":"Sub task 2","supplemental":["More info about sub task 2","- [ ] We need to get this done","- [x] And this","- [ ] This one is extra"]}},{"eventString":"2022-07: Yearly planning","ranges":{"date":{"fromDateTime":"2022-01-01T00:00:00.000+08:00","toDateTime":"0008-01-01T00:00:00.000+08:05","originalString":"2022-07","dateRangeInText":{"type":"dateRange","from":268,"to":276}},"event":{"from":268,"to":294,"type":"event"}},"event":{"tags":[],"locations":[],"eventDescription":"Yearly planning","supplemental":[]}}]`
+      // console.log(JSON.parse(josn), 'josnjosn')
+    }
   }
 }
 </script>

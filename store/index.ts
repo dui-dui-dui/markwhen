@@ -72,7 +72,7 @@ export interface Settings {
   filter: string[]
 }
 const colors: Tags = {
-  pink: 'pink',
+  pink: '#d336b1',
   primary: '#1890ff',
   success: '#52c41a',
   warning: '#faad14',
@@ -386,6 +386,7 @@ export function clamp(value: number, min: number = 0, max: number = 1) {
 }
 export const getters: GetterTree<State, State> = {
   cascades(state: State, getters: any): Cascade[] {
+    console.log(parse(state.eventsString), 'parse(state.eventsString)')
     return parse(state.eventsString).cascades
   },
   cascade(state: State, getters: any): Cascade {
@@ -411,6 +412,7 @@ export const getters: GetterTree<State, State> = {
       [...getters.cascade.events],
       getters.settings.sort
     )
+    console.log(getters.cascade, 'sorted')
     return sorted
   },
   eventAtPosition(
@@ -446,10 +448,7 @@ export const getters: GetterTree<State, State> = {
   },
   filteredEvents(state: State, getters: any): Events {
     const events = getters.events as Events
-    // const _events = getPlacementRules()
-    // const events = placementRuleSchemaMap(_events)
-    console.log("in filteredEvents", events)
-
+    console.log(events, 'filteredEvents')
     const filter = state.settings[state.cascadeIndex].filter
     if (filter.length === 0) {
       return events
@@ -480,6 +479,7 @@ export const getters: GetterTree<State, State> = {
         }
       }
     }
+    console.log(filtered, 'filteredfiltered')
     sortEvents(filtered, getters.settings.sort)
     return filtered
   },
@@ -1027,6 +1027,30 @@ export const actions: ActionTree<State, State> = {
       })
     )
     editorView.focus()
+  },
+  createNewGroup({ commit, state, getters }, groupInfo) {
+    const dateRange: DateRange = {
+      fromDateTime: groupInfo.range[0].dateTime,
+      toDateTime: groupInfo.range[1].dateTime,
+    };
+    const dateRangeString = dateRangeToString(
+      dateRange,
+      getters.scaleOfViewportDateInterval,
+      getters.metadata.dateFormat
+    );
+    const events = (getters.events as Events).flat();
+    const lastIndexOfLastEvent = events.length
+      ? events[events.length - 1].ranges.event.to
+      : (getters.cascade as Cascade).metadata.endStringIndex;
+
+    const es = state.eventsString || "";
+    const newString =
+      es.slice(0, lastIndexOfLastEvent) +
+      `\n group ${groupInfo.name}` +
+      `\n${dateRangeString}: #${groupInfo.tag} Event \n` +
+      es.slice(lastIndexOfLastEvent);
+
+    commit(MUTATION_SET_EVENTS_STRING, newString);
   },
   createEventFromRange({ commit, state, getters }, range: OffsetRange) {
     const dateRange: DateRange = {

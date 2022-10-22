@@ -242,14 +242,16 @@ export default Vue.extend({
   },
   methods: {
     edit() {
-      const vm = this;
-      vm.$store.commit("sidebar/setVisibility", true);
-      if (vm.$store.state.sidebar.selectedComponent !== "editor") {
-        vm.$store.commit("sidebar/setSelectedComponent", "editor");
-      }
-      Vue.nextTick(() => {
-        vm.$store.dispatch("moveCursorToEvent", vm.event);
-      });
+      console.log('我是编辑')
+      // const vm = this;
+      // vm.$store.commit("sidebar/setVisibility", true);
+      // if (vm.$store.state.sidebar.selectedComponent !== "editor") {
+      //   vm.$store.commit("sidebar/setSelectedComponent", "editor");
+      // }
+      // Vue.nextTick(() => {
+      //   vm.$store.dispatch("moveCursorToEvent", vm.event);
+      // });
+      this.$emit('edit', this.event)
     },
     moveUp() {
       this.$store.dispatch("moveEventUpOrDown", {

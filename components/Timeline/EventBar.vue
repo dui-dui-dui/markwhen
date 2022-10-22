@@ -41,10 +41,11 @@ export default Vue.extend({
     ...mapGetters(["distanceFromBaselineLeftmostDate"]),
     tagColor(): string | undefined {
       if (this.event.event.tags[0]) {
-        console.log(this.$store.getters.tags, 'tagColor')
-        // return this.$store.getters.tags[this.event.event.tags[0]];
-        return this.$store.getters.tags['pink'];
+        console.log(this.$store.getters.tags, 'tagColor', this.event.event.tags[0])
+        return this.$store.getters.tags[this.event.event.tags[0]];
+        // return this.$store.getters.tags['pink'];
       }
+      console.log(this.event, 'this.event.event.tags[0]this.event.event.tags[0]')
       return undefined;
     },
     percent(): number | undefined {

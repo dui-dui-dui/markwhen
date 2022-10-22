@@ -23,6 +23,7 @@
         v-else
         :key="event.eventString.substring(0, 50)"
         :event="event"
+        @edit="edit"
       ></event-row
     ></template>
     <div class="w-full relative mt-2" v-if="$store.state.editable">
@@ -66,6 +67,7 @@
 <script lang="ts">
 import EventRow from "./EventRow.vue";
 import Vue from "vue";
+import { Event } from "~/src/Types";
 import DrawerHeader from "../Drawer/DrawerHeader.vue";
 import { mapGetters } from "vuex";
 import EventGroup from "./EventGroup/EventGroup.vue";
@@ -104,6 +106,10 @@ export default Vue.extend({
     clic() {
       console.log("click");
     },
+    edit(data: Event) {
+      console.log(data, '编辑获取的值');
+      (this.$refs.RuleFormModal as Vue & {showModal:Function}).showModal(data);
+    }
   },
 });
 </script>

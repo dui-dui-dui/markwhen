@@ -23,6 +23,7 @@
       v-for="event in eventGroup"
       :key="event.eventString.substring(0, 30)"
       :event="event"
+      @edit="edit"
     ></event-row>
     <div
       :style="
@@ -70,17 +71,19 @@
         </svg>
       </button>
     </div>
+    <RuleFormModal ref="RuleFormModal"></RuleFormModal>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { EventDescription } from "~/src/Types";
+import { EventDescription, Event } from "~/src/Types";
 import EventRow from "../EventRow.vue";
 import { mapGetters } from "vuex";
+import RuleFormModal from '../../Drawer/RuleFormModal.vue'
 
 export default Vue.extend({
-  components: { EventRow },
+  components: { EventRow, RuleFormModal },
   props: ["eventGroup", "left", "hovering", "canCalculateButton"],
   computed: {
     ...mapGetters(["distanceBetweenDates"]),
@@ -166,6 +169,12 @@ export default Vue.extend({
       );
     },
   },
+  methods: {
+    edit(data: Event) {
+      // console.log(data, 'expanded');
+      (this.$refs.RuleFormModal as Vue & {showModal:Function}).showModal(data);
+    }
+  }
 });
 </script>
 
