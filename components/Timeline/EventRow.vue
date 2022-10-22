@@ -434,7 +434,7 @@ export default Vue.extend({
 }
 .eventRow {
   padding-top: 2px;
-  padding-bottom: 2px;
+  padding-bottom: 20px;
 }
 
 .eventDate {
