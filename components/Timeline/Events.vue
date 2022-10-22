@@ -35,12 +35,12 @@
             :eventType="eventType"
           />
         </template>
-        <!-- <event-row
+        <event-row
           v-else
           :key="event.eventString.substring(0, 50)"
           :event="event"
           @edit="edit"
-        ></event-row> -->
+        ></event-row>
       </template>
     </div>
     <div class="w-full relative mt-2" v-if="$store.state.editable && eventType === 'schema'">

@@ -376,9 +376,7 @@ export function clamp(value: number, min: number = 0, max: number = 1) {
 }
 export const getters: GetterTree<State, State> = {
   cascades(state: State, getters: any): Cascade[] {
-    console.log(parse(state.eventsString), 'parse(state.eventsString)')
-    return parse(exampleTimeline).cascades
-    // return parse(state.eventsString).cascades
+    return parse(state.eventsString).cascades
   },
   cascade(state: State, getters: any): Cascade {
     return getters.cascades[state.cascadeIndex];
