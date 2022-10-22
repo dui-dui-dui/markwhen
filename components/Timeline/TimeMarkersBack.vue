@@ -71,7 +71,7 @@ export default Vue.extend({
         const a = this.timeMarkerWeights[3] * 0.1;
         if (schema == "meta" || schema == "system" || schema == "default") {
           return isDark
-            ? `rgba(60, 60, 30, ${a})`
+            ? `rgba(255, 120, 30, ${a})`
             : `rgba(200, 200, 0, ${a})`;
         }
       }
