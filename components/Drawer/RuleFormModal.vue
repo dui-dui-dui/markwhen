@@ -46,7 +46,7 @@
         <a-form-model-item label="Value" style="margin: 0">
           <a-input v-model="form.name" placeholder="value" />
         </a-form-model-item> -->
-        <SubFormModal ref="subForm" v-for="txt in subFormList" :txt="txt" :key="txt" @delete="delDomain" />
+        <SubFormModal ref="subForm" v-for="txt in subFormList" :formData="txt" :txt="txt.id" :key="txt.id" @delete="delDomain" />
       </div>
       <div class="AddField">
         <a-button class="button" type="dashed" style="width: 60%" @click="addDomain">
@@ -82,18 +82,24 @@ export default {
     }
   },
   computed: {
-    ...mapState({groups: (state) => state.groups })
+    ...mapState({groups: (state) => state.groups }),
   },
   methods: {
     showModal(record, title) {
       let groups = JSON.parse(JSON.stringify(this.groups))
       const group = groups.filter(item => item.group_id == title)[0]
       const rule = group.rules.filter(item => item.id == record.event.eventDescription)
-      console.log(record, '我被调用了', title)
       this.title = title
       this.rowName = record.event.eventDescription
       this.form = rule[0] || {}
-      this.subFormList = rule[0].subForm || []
+      if (rule[0].subForm) {
+        this.subFormList = rule[0].subForm.map((item, index) => {
+          return {
+            ...item,
+            id: 'subForm_'+ index +'_' + new Date().valueOf()
+          }
+        })
+      }
       this.visible = true
     },
     handleCancel() {
@@ -105,9 +111,16 @@ export default {
         if (valid) {
           const validTask = this.$refs.subForm.map(form=>form.onValid())
           Promise.all(validTask).then(subFormData=>{
-            const data ={
+            let subForm = subFormData.map(item => {
+              return {
+                key: item.key,
+                op: item.op,
+                value: item.value
+              }
+            })
+            const data = {
               ...this.form,
-              subForm: subFormData
+              subForm: subForm
             }
             let groups = JSON.parse(JSON.stringify(this.groups))
             let newGroups = groups.map(item => {
@@ -122,7 +135,6 @@ export default {
               }
               return item
             })
-            console.log(newGroups, 'newGroups')
             this.$store.commit("setGroups", newGroups)
             this.handleCancel()
           })
@@ -131,10 +143,10 @@ export default {
       
     },
     addDomain() {
-      this.subFormList.push('subForm_'+ this.subFormList.length +'_'+new Date().valueOf())
+      this.subFormList.push({ id: 'subForm_'+ this.subFormList.length +'_'+new Date().valueOf()})
     },
     delDomain(key){
-      this.subFormList = this.subFormList.filter(txt=>txt!==key)
+      this.subFormList = this.subFormList.filter(txt=>txt.id!==key)
     }
   }
 }

@@ -18,7 +18,7 @@
 <script>
 export default {
   name:"subFormTable",
-  props: ["txt"],
+  props: ["txt", "formData"],
   data(){
     return {
       form: this.$form.createForm(this),
@@ -28,6 +28,9 @@ export default {
         ]
       }
     }
+  },
+  mounted() {
+    this.form.setFieldsValue(this.formData)
   },
   methods:{
     onValid(){
