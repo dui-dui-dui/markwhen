@@ -6,7 +6,7 @@
       class="absolute left-0 top-0 bottom-0 rounded-full percentBar transition"
       :class="percentBarColorClass"
       :style="`min-width: 10px; max-width: 100%; ${percentBarColorStyle}; width: ${percent}%;`"
-    ></div>
+    >3 Voters</div>
     <drag-handle
       v-if="$store.state.editable && hovering"
       @startResize="startResizeLeft"
@@ -63,8 +63,7 @@ export default Vue.extend({
       return c;
     },
     percentBarColorStyle(): string {
-      let style = "";
-      console.log(this.tagColor, 'this.tagColor1')
+      let style = "color: white; text-align: center;";
       if (this.tagColor) {
         style += ` background-color: rgba(${this.tagColor}, 0.8)`;
       }
@@ -94,7 +93,7 @@ export default Vue.extend({
 <style>
 .eventBar {
   border-radius: 5px;
-  height: 10px;
+  height: 20px;
   flex-shrink: 0;
 }
 </style>

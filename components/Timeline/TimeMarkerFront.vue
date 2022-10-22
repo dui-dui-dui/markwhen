@@ -50,11 +50,11 @@ export default Vue.extend({
       return 6;
     },
     text(): string | number {
-      return granularities[this.currentDateResolution][this.scaleForThisDate](
-        this.dateTime
-      );
+      // return granularities[this.currentDateResolution][this.scaleForThisDate](
+      //   this.dateTime
+      // );
 
-      // return this.schema
+      return this.schema
     },
   },
 });
