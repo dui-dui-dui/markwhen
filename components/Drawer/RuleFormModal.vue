@@ -93,7 +93,7 @@ export default {
       this.title = title
       this.rowName = record.event.eventDescription
       this.form = rule[0] || {}
-      this.subFormList = rule[0].subFormList || []
+      this.subFormList = rule[0].subForm || []
       this.visible = true
     },
     handleCancel() {

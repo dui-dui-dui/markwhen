@@ -185,6 +185,7 @@ export default Vue.extend({
       const rangeToCreate = this.creatingEventRange
         ? this.creatingEventRange
         : this.startEventCreationRange;
+      
       this.$store.dispatch("createEventFromRange", rangeToCreate);
       this.stopCreating();
     },
