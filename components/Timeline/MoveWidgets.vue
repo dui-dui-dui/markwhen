@@ -7,13 +7,11 @@
       absolute
       pr-8
       moveWidgets
-      top-0
-      bottom-0
       items-center
       justify-center
       p-2
+      mt-6
     "
-    :style="style"
   >
     <div
       class="flex flex-row mr-1 items-center justify-center"

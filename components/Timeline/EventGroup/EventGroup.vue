@@ -1,39 +1,54 @@
 <template>
   <div>
-    <expanded
-      v-if="expanded"
+    <ExpandedWithoutAction
+      v-if="eventType === 'region'"
       :eventGroup="eventGroup"
       :left="left"
       :hovering="hovering"
       :canCalculateButton="canCalculateButton"
-      @hovering="hovering = $event"
-      @collapse="expanded = !expanded"
     />
-    <CollapsedGroup
-      v-if="!expanded && isGroupStyleTight"
-      :eventGroup="eventGroup"
-      :left="left"
-      @expand="expand"
-    />
-    <collapsed-section
-      v-if="!expanded && !isGroupStyleTight"
-      :eventGroup="eventGroup"
-      @expand="expand"
-    />
+    <div v-else>
+      <expanded
+        v-if="expanded"
+        :eventGroup="eventGroup"
+        :left="left"
+        :hovering="hovering"
+        :canCalculateButton="canCalculateButton"
+        @hovering="hovering = $event"
+        @collapse="expanded = !expanded"
+      />
+      <CollapsedGroup
+        v-if="!expanded && isGroupStyleTight"
+        :eventGroup="eventGroup"
+        :left="left"
+        @expand="expand"
+      />
+      <collapsed-section
+        v-if="!expanded && !isGroupStyleTight"
+        :eventGroup="eventGroup"
+        @expand="expand"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import EventRow from "../EventRow.vue";
+// import EventRow from "../EventRow.vue";
 import { mapGetters } from "vuex";
 import Expanded from "./Expanded.vue";
+import ExpandedWithoutAction from "./ExpandedWithoutAction.vue";
 import CollapsedGroup from "./CollapsedGroup.vue";
 import CollapsedSection from "./CollapsedSection.vue";
 
 export default Vue.extend({
-  components: { EventRow, Expanded, CollapsedGroup, CollapsedSection },
-  props: ["eventGroup"],
+  components: {
+    Expanded,
+    CollapsedGroup,
+    CollapsedSection,
+    ExpandedWithoutAction,
+  },
+  props: ["eventGroup", "eventType"],
   data() {
     return {
       expanded: !!this.eventGroup.startExpanded,
@@ -78,5 +93,4 @@ export default Vue.extend({
 });
 </script>
 
-<style>
-</style>
+<style></style>

@@ -1,6 +1,6 @@
 <template>
-  <div class="fixed inset-0 pointer-events-none">
-    <div class="timeMarkerContainer h-full">
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="timeMarkerContainer h-fit">
       <div class="flex h-full" :style="`margin-left: -${leftMargin}px`">
         <div
           class="timeMarkerShader w-full h-12 fixed top-0"

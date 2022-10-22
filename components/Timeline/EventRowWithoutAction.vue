@@ -2,34 +2,15 @@
   <div
     class="eventRow relative"
     :style="eventRowStyle"
-    @mouseenter="hover = true"
-    @mouseleave="hover = false"
   >
-    <div v-if="$store.state.editable">
-      <move-widgets
-        v-show="hovering"
-        @move="move"
-        @moveUp="moveUp"
-        @moveDown="moveDown"
-        @mouseenter="hover = true"
-        @mouseleave="hover = false"
-        @edit="edit"
-      />
-    </div>
     <div class="flex flex-row">
       <div
-        @mouseover="barHover = true"
-        @mouseleave="barHover = false"
         class="eventItem flex-row items-center flex rounded -mx-2 px-2 py-1"
         :class="eventClass"
-        v-on="hasMeta ? { click: togglePhotos } : {}"
       >
-        <event-bar
+        <EventBarWithoutAction
           :event="event"
-          :hovering="hovering"
           :width="width"
-          @startResizeLeft="startResizeLeft"
-          @startResizeRight="startResizeRight"
         />
       </div>
     </div>
@@ -39,16 +20,14 @@
 <script lang="ts">
 import { DateRange, Event } from "../../src/Types";
 import Vue from "vue";
-import EventMeta from "./EventMeta.vue";
 import { mapGetters, mapState } from "vuex";
-import EventBar from "./EventBar.vue";
+import EventBarWithoutAction from "./EventBarWithoutAction.vue";
 import { DateTime } from "luxon";
 import { roundDateTime } from "~/store";
-import MoveWidgets from "./MoveWidgets.vue";
 export const EVENT_HEIGHT_PX = 10;
 
 export default Vue.extend({
-  components: { EventMeta, EventBar, MoveWidgets },
+  components: { EventBarWithoutAction },
   props: {
     event: Event,
   },
