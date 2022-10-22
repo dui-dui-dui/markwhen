@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0">
+  <div class="absolute inset-0">
     <div class="timeMarkerContainer h-full">
       <div
         class="flex flex-row h-full"

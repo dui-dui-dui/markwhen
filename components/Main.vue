@@ -4,17 +4,32 @@
       class="
         flex flex-col
         md:flex-row
-        h-full
+        h-3/4
+        dark:bg-baseGray
+        bg-slate-100
+        dark:text-white
+        text-gray-900
+        
+      "
+    >
+      <!-- <template v-if="$store.state.editable">
+        <sidebar v-show="$store.state.sidebar.visible"
+      /></template> -->
+      <timeline eventType="rule" />
+    </div>
+    <div class="h-10"></div>
+    <div
+      class="
+        flex flex-col
+        md:flex-row
+        h-fit
         dark:bg-baseGray
         bg-slate-100
         dark:text-white
         text-gray-900
       "
     >
-      <!-- <template v-if="$store.state.editable">
-        <sidebar v-show="$store.state.sidebar.visible"
-      /></template> -->
-      <timeline />
+      <timeline eventType="region" />
     </div>
   </div>
 </template>

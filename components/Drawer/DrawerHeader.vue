@@ -8,6 +8,8 @@
       left-2
       md:left-4 md:ml-4
       z-20
+      mt-20
+      max-w-max
     "
   >
     <!-- <div class="" v-if="metadata.description">

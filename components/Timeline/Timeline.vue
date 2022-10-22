@@ -13,10 +13,13 @@
       :newEventPosition="newEventPosition"
       :creating="!!startEventCreationRange"
       @startMakingEvent="startMakingEvent"
+      :eventType="eventType"
     />
     <TimeMarkersFront :markers="markers" />
-    <drawer-header />
-    <resize-observer @notify="handleResize" />
+    <template class="mt-10" v-if="eventType === 'rule'">
+      <drawer-header />
+      <resize-observer @notify="handleResize" />
+    </template>
   </div>
 </template>
 
@@ -41,6 +44,7 @@ import "vue-resize/dist/vue-resize.css";
  */
 
 export default Vue.extend({
+  props: ["eventType"],
   components: {
     Events,
     DrawerHeader,

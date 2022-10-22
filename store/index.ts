@@ -16,8 +16,6 @@ import {
   Events,
   Range,
   Tags,
-  DateRangePart,
-  EventDescription,
 } from "../src/Types";
 import { MutationTree, GetterTree, ActionTree } from "vuex";
 import { DateTime } from "luxon";
@@ -46,7 +44,7 @@ const initialScale = 0.3;
 export const viewportLeftMarginPixels = 0;
 export const timeMarkerWeightMinimum = 0.25;
 
-const MOSTLEFTDATE = DateTime.now().startOf("day");
+const MOSTLEFTDATE = DateTime.now().startOf("year");
 const MARDKERS = mockData.schemas;
 
 let currentTimelineName = "";
@@ -383,7 +381,6 @@ export function clamp(value: number, min: number = 0, max: number = 1) {
 }
 export const getters: GetterTree<State, State> = {
   cascades(state: State, getters: any): Cascade[] {
-    console.log(parse(state.eventsString), 'parse(state.eventsString)')
     return parse(state.eventsString).cascades
   },
   cascade(state: State, getters: any): Cascade {
@@ -444,42 +441,10 @@ export const getters: GetterTree<State, State> = {
   },
   filteredEvents(state: State, getters: any): Events {
     const events = getters.events as Events;
-    const _groups = mockData.groups;
-    const finalEvents = [];
-    for (const g of _groups) {
-      const eg: EventSubGroup = [];
-      eg.range = {
-        min: DateTime.fromISO(g.range.min),
-        max: DateTime.fromISO(g.range.min),
-        latest: DateTime.fromISO(g.range.latest),
-      };
-      eg.tags = g.tags;
-      eg.title = g.title;
-      eg.startExpanded = g.startExpanded;
-      eg.style = "group";
-      eg.push(
-        ...g.events.map((e) => {
-          const _ranges = {
-            event: e.ranges.event,
-            date: new DateRangePart(
-              DateTime.fromISO(e.ranges.date.fromDateTime),
-              DateTime.fromISO(e.ranges.date.toDateTime),
-              e.ranges.date.originalString,
-              e.ranges.date.dateRangeInText
-            ),
-          };
-          const _event = new EventDescription([]);
-          return new Event(e.eventString, _ranges, _event);
-        })
-      );
-      finalEvents.push(eg);
-    }
-    console.log("finalEvents", finalEvents);
-
     const filter = state.settings[state.cascadeIndex].filter;
+    console.log('events', events)
     if (filter.length === 0) {
       return events;
-      // return finalEvents
     }
 
     const filtered = [];
@@ -509,6 +474,47 @@ export const getters: GetterTree<State, State> = {
     }
     sortEvents(filtered, getters.settings.sort);
     return filtered;
+  },
+
+  getRegions(state: State, getters: any): Events {
+    const parsedRegions = parse(exampleTimeline).cascades
+    const regionsCascade = parsedRegions[state.cascadeIndex]
+    const sortedRegions = sortEvents([...regionsCascade.events], getters.settings.sort) as Events
+    // const events = getters.events as Events;
+    console.log('sortedRegions', sortedRegions)
+
+    // const filter = state.settings[state.cascadeIndex].filter;
+    // if (filter.length === 0) {
+      return sortedRegions
+    // }
+
+    // const filtered = [];
+    // for (const eventOrEvents of events) {
+    //   if (eventOrEvents instanceof Event) {
+    //     if (eventOrEvents.event.tags.some((tag) => filter.includes(tag))) {
+    //       filtered.push(eventOrEvents);
+    //     }
+    //   } else {
+    //     const group = eventOrEvents as EventSubGroup;
+    //     if (group.tags?.some((tag) => filter.includes(tag))) {
+    //       filtered.push(group);
+    //     } else {
+    //       const filteredSubEvents: EventSubGroup = group.filter((event) =>
+    //         event.event.tags.some((tag) => filter.includes(tag))
+    //       );
+    //       if (filteredSubEvents.length) {
+    //         filteredSubEvents.range = group.range;
+    //         filteredSubEvents.tags = group.tags;
+    //         filteredSubEvents.title = group.title;
+    //         filteredSubEvents.startExpanded = group.startExpanded;
+    //         filteredSubEvents.style = group.style;
+    //         filtered.push(filteredSubEvents);
+    //       }
+    //     }
+    //   }
+    // }
+    // sortEvents(filtered, getters.settings.sort);
+    // return filtered;
   },
   tags(state: State, getters: any): Tags {
     return state.colors;
@@ -705,7 +711,6 @@ export const getters: GetterTree<State, State> = {
       markers[markers.length - 1].dateTime,
       rightmost
     );
-    console.log("markers:", markers);
     // console.log('from', leftViewportDate.toLocaleString(), 'to', rightViewportDate.toLocaleString())
     // console.log('num markers:', markers.length)
     // console.log('leftmost marker', m(markers[0]))

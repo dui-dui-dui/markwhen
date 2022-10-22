@@ -10,23 +10,40 @@
       class="absolute h-full dark:bg-slate-400 bg-blue-300"
       :style="`width: 1px; left: ${distanceFromBaselineLeftmostDate(now)}px`"
     ></div> -->
-    <template v-for="event in filteredEvents">
-      <template v-if="Array.isArray(event)">
-        <event-group
-          :key="
-            event.length ? event[0].eventString.substring(0, 50) : 'newGroup'
-          "
-          :eventGroup="event"
-        />
+    <div v-if="eventType === 'region'">
+      <template v-for="event in getRegions">
+        <template v-if="Array.isArray(event)">
+          <event-group
+            :key="
+              event.length ? event[0].eventString.substring(0, 50) : 'newGroup'
+            "
+            :eventGroup="event"
+            :eventType="eventType"
+          />
+        </template>
       </template>
-      <event-row
-        v-else
-        :key="event.eventString.substring(0, 50)"
-        :event="event"
-        @edit="edit"
-      ></event-row
-    ></template>
-    <div class="w-full relative mt-2" v-if="$store.state.editable">
+    </div>
+
+    <div v-else>
+      <template v-for="event in filteredEvents">
+        <template v-if="Array.isArray(event)">
+          <event-group
+            :key="
+              event.length ? event[0].eventString.substring(0, 50) : 'newGroup'
+            "
+            :eventGroup="event"
+            :eventType="eventType"
+          />
+        </template>
+        <event-row
+          v-else
+          :key="event.eventString.substring(0, 50)"
+          :event="event"
+          @edit="edit"
+        ></event-row>
+      </template>
+    </div>
+    <div class="w-full relative mt-2" v-if="$store.state.editable && eventType === 'rule'">
       <button
         title="Click and drag to create new event"
         class="
@@ -74,7 +91,7 @@ import EventGroup from "./EventGroup/EventGroup.vue";
 import { DateTime } from "luxon";
 
 export default Vue.extend({
-  props: ["newEventPosition", "creating"],
+  props: ["newEventPosition", "creating", "eventType"],
   components: { EventRow, DrawerHeader, EventGroup },
   computed: {
     now(): DateTime {
@@ -95,6 +112,7 @@ export default Vue.extend({
       "distanceFromBaselineLeftmostDate",
       "baselineLeftmostDate",
       "baselineRightmostDate",
+      "getRegions"
     ]),
   },
   watch: {
