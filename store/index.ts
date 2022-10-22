@@ -64,21 +64,12 @@ export interface Settings {
   filter: string[];
 }
 const colors: Tags = {
-<<<<<<< HEAD
   pink: '#d336b1',
   primary: '#1890ff',
   success: '#52c41a',
   warning: '#faad14',
   error: '#f5222d'
 }
-=======
-  pink: "pink",
-  primary: "#1890ff",
-  success: "#52c41a",
-  warning: "#faad14",
-  error: "#f5222d",
-};
->>>>>>> 2bac7c78606eb9ddc2d44883bb6a1e67e4c9ce8d
 interface State {
   list: string[];
   currentTimelineName: string;
@@ -387,14 +378,8 @@ export function clamp(value: number, min: number = 0, max: number = 1) {
 }
 export const getters: GetterTree<State, State> = {
   cascades(state: State, getters: any): Cascade[] {
-<<<<<<< HEAD
     console.log(parse(state.eventsString), 'parse(state.eventsString)')
     return parse(state.eventsString).cascades
-=======
-    // console.log('state.eventsString', state.eventsString)
-    // console.log(parse(state.eventsString).cascades)
-    return parse(state.eventsString).cascades;
->>>>>>> 2bac7c78606eb9ddc2d44883bb6a1e67e4c9ce8d
   },
   cascade(state: State, getters: any): Cascade {
     return getters.cascades[state.cascadeIndex];
@@ -418,14 +403,8 @@ export const getters: GetterTree<State, State> = {
     const sorted = sortEvents(
       [...getters.cascade.events],
       getters.settings.sort
-<<<<<<< HEAD
-    )
-    console.log(getters.cascade, 'sorted')
-    return sorted
-=======
     );
     return sorted;
->>>>>>> 2bac7c78606eb9ddc2d44883bb6a1e67e4c9ce8d
   },
   eventAtPosition(
     state: State,
@@ -459,11 +438,6 @@ export const getters: GetterTree<State, State> = {
     };
   },
   filteredEvents(state: State, getters: any): Events {
-<<<<<<< HEAD
-    const events = getters.events as Events
-    console.log(events, 'filteredEvents')
-    const filter = state.settings[state.cascadeIndex].filter
-=======
     const events = getters.events as Events;
     const _groups = mockData.groups;
     const finalEvents = [];
@@ -498,7 +472,6 @@ export const getters: GetterTree<State, State> = {
     console.log("finalEvents", finalEvents);
 
     const filter = state.settings[state.cascadeIndex].filter;
->>>>>>> 2bac7c78606eb9ddc2d44883bb6a1e67e4c9ce8d
     if (filter.length === 0) {
       return events;
       // return finalEvents
@@ -529,14 +502,8 @@ export const getters: GetterTree<State, State> = {
         }
       }
     }
-<<<<<<< HEAD
-    console.log(filtered, 'filteredfiltered')
-    sortEvents(filtered, getters.settings.sort)
-    return filtered
-=======
     sortEvents(filtered, getters.settings.sort);
     return filtered;
->>>>>>> 2bac7c78606eb9ddc2d44883bb6a1e67e4c9ce8d
   },
   tags(state: State, getters: any): Tags {
     return state.colors;
