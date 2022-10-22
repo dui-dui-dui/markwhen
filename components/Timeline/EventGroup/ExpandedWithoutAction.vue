@@ -24,8 +24,8 @@
     <div
       :style="
         isGroupStyleTight
-          ? `margin-left: ${left}px; width: ${this.fullWidth}px; order: -9999;`
-          : `order: -9999`
+          ? `margin-left: ${left}px; width: ${this.fullWidth}px; order: -9999; height: 50px; padding-bottom: 1rem;`
+          : `order: -9999; padding-bottom: 1rem`
       "
       class="sticky top-10 cursor-pointer"
     >
@@ -98,10 +98,8 @@ export default Vue.extend({
       return this.eventGroup.style === "group";
     },
     bgColorClass(): string {
-
-      console.log('hello from ....')
       if (!this.bgColorStyle) {
-        return `bg-gray-400 dark:bg-gray-800`;
+        return `bg-blue-400 dark:bg-red-800`;
       }
       return "";
     },

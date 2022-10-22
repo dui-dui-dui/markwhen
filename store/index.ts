@@ -572,7 +572,7 @@ export const getters: GetterTree<State, State> = {
     const earliestTime = MOSTLEFTDATE.minus({ days: 0 });
     const days = metadata.maxDuration.as("days");
     // if (days < 1) {
-    return floorDateTime(earliestTime.minus({ days: 1 }), "day");
+    return floorDateTime(earliestTime.minus({ days: 0 }), "day");
     // }
     // if (days < 30) {
     //   return floorDateTime(earliestTime.minus({ months: 4 }), "year");

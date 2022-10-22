@@ -108,7 +108,7 @@ export default Vue.extend({
       const leftMargin = this.distanceFromBaselineLeftmostDate(
         this.tempFrom ? this.tempFrom : this.event.ranges.date.fromDateTime
       );
-      return `margin-left: ${leftMargin}px; position: absolute`;
+      return `margin-left: ${leftMargin}px; position: absolute; padding-top: 1rem`;
     },
     photoBarClass(): string {
       let c = "photoBar transition rounded-lg shadow ";
