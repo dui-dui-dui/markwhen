@@ -137,6 +137,7 @@ export default Vue.extend({
       return this.settings.filter;
     },
     style(): string {
+      return "top: 2rem"
       return this.showMoveButtons ? "left: -6rem" : "left: -2.2rem;";
     },
     showMoveButtons(): boolean {

@@ -433,7 +433,7 @@ export default Vue.extend({
   width: 10px;
 }
 .eventRow {
-  padding-top: 2px;
+  padding-top: 10px;
   padding-bottom: 2px;
 }
 
