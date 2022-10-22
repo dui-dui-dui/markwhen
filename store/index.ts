@@ -232,8 +232,8 @@ export const mutations: MutationTree<State> = {
   toggleSort(state: State, sort: Sort) {
     state.settings[state.cascadeIndex].sort =
       sorts[
-        (sorts.indexOf(state.settings[state.cascadeIndex].sort) + 1) %
-          sorts.length
+      (sorts.indexOf(state.settings[state.cascadeIndex].sort) + 1) %
+      sorts.length
       ];
   },
   setHasSeenHowTo(state: State, hasSeen: boolean) {
@@ -442,8 +442,8 @@ export const getters: GetterTree<State, State> = {
     const events = getters.events as Events;
     const _groups = mockData.groups;
     const finalEvents = [];
-    let eg: EventSubGroup = [];
     for (const g of _groups) {
+      const eg: EventSubGroup = [];
       eg.range = {
         min: DateTime.fromISO(g.range.min),
         max: DateTime.fromISO(g.range.min),
@@ -468,14 +468,14 @@ export const getters: GetterTree<State, State> = {
           return new Event(e.eventString, _ranges, _event);
         })
       );
+      finalEvents.push(eg);
     }
-    finalEvents.push(eg);
     console.log("finalEvents", finalEvents);
 
     const filter = state.settings[state.cascadeIndex].filter;
     if (filter.length === 0) {
-      // return events;
-      return finalEvents
+      return events;
+      // return finalEvents
     }
 
     const filtered = [];
@@ -801,16 +801,14 @@ function dateTimeToString(
   if (isMonthStartOrEnd(dateTime, scale)) {
     if (isStartDate) {
       const adjustedForward = dateTime.plus({ days: 2 });
-      return `${
-        adjustedForward.month < 10
+      return `${adjustedForward.month < 10
           ? "0" + adjustedForward.month
           : adjustedForward.month
-      }/${adjustedForward.year}`;
+        }/${adjustedForward.year}`;
     } else {
       const adjustedBack = dateTime.minus({ days: 2 });
-      return `${
-        adjustedBack.month < 10 ? "0" + adjustedBack.month : adjustedBack.month
-      }/${adjustedBack.year}`;
+      return `${adjustedBack.month < 10 ? "0" + adjustedBack.month : adjustedBack.month
+        }/${adjustedBack.year}`;
     }
   }
   if (isDayStartOrEnd(dateTime, scale)) {
@@ -942,8 +940,8 @@ export const actions: ActionTree<State, State> = {
     commit(
       MUTATION_SET_EVENTS_STRING,
       pre +
-        `${dateRangeToString(range, scale, getters.metadata.dateFormat)}:` +
-        post
+      `${dateRangeToString(range, scale, getters.metadata.dateFormat)}:` +
+      post
     );
   },
   addNewPage({ commit, state, getters }) {
@@ -1001,7 +999,7 @@ export const actions: ActionTree<State, State> = {
     commit(
       MUTATION_SET_EVENTS_STRING,
       currentEventsString.substring(0, startIndex) +
-        currentEventsString.substring(endIndex)
+      currentEventsString.substring(endIndex)
     );
   },
   movePages({ commit, state, getters }, { from, to }) {
