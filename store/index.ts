@@ -86,6 +86,7 @@ interface State {
   hoveringEvent: Event | null;
   choosingColor: boolean;
   colors: Tags;
+  groups: Object[];
 }
 
 export const state: () => State = () => ({
@@ -105,6 +106,7 @@ export const state: () => State = () => ({
   hoveringEvent: null as Event | null,
   choosingColor: false,
   colors: colors,
+  groups: []
 });
 
 export type DisplayScale =
@@ -174,6 +176,9 @@ function blankSettings(): Settings {
 }
 
 export const mutations: MutationTree<State> = {
+  setGroups(state: State, groups) {
+    state.groups = groups
+  },
   setChoosingColor(state: State, choosingColor: boolean) {
     state.choosingColor = choosingColor;
   },

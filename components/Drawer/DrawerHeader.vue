@@ -10,14 +10,14 @@
       z-20
     "
   >
-    <div class="" v-if="metadata.description">
+    <!-- <div class="" v-if="metadata.description">
       <h4 class="text-lg font-medium text-gray-400 pl-1 timelineTitle">
         {{ metadata.description }}
       </h4>
     </div>
     <div class="ml-1 py-1 flex">
       <cascade-buttons :shadowed="true" />
-    </div>
+    </div> -->
     <div class="flex flex-row items-center" @mousedown="mousedown">
       <!-- <button
         role="button"

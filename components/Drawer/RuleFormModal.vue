@@ -8,11 +8,11 @@
     @cancel="handleCancel"
   >
     <a-form-model :model="form" ref="form" :label-col="labelCol" :wrapper-col="wrapperCol">
-      <a-form-model-item label="Name">
-        <a-input v-model="form.name" placeholder="Rule Name" />
+      <a-form-model-item label="Name" prop="id">
+        <a-input v-model="form.id" readonly placeholder="Rule Name" />
       </a-form-model-item>
-      <a-form-model-item label="Role">
-        <a-select v-model="form.region" placeholder="please select role">
+      <a-form-model-item label="Role" prop="role">
+        <a-select v-model="form.role" placeholder="please select role">
           <a-select-option value="leader">
             leader
           </a-select-option>
@@ -27,17 +27,17 @@
           </a-select-option>
         </a-select>
       </a-form-model-item>
-      <a-form-model-item label="Count">
-        <a-input v-model="form.name" placeholder="Count" />
+      <a-form-model-item label="Count" prop="count">
+        <a-input v-model="form.count" placeholder="Count" />
       </a-form-model-item>
-      <a-form-model-item label="Override">
-        <a-switch v-model="form.delivery" />
+      <a-form-model-item label="Override" prop="override">
+        <a-switch v-model="form.override" />
       </a-form-model-item>
       <a-form-model-item label="">
         <div class="subtitle">Label Constraints</div>
       </a-form-model-item>
-      <div class="LabelConstraints">
-        <a-form-model-item label="Key" style="margin-bottom: 10px">
+      <div class="LabelConstraints" v-if="subFormList.length > 0">
+        <!-- <a-form-model-item label="Key" style="margin-bottom: 10px">
           <a-input v-model="form.name" placeholder="Key" />
         </a-form-model-item>
         <a-form-model-item label="Op" style="margin-bottom: 10px">
@@ -45,7 +45,8 @@
         </a-form-model-item>
         <a-form-model-item label="Value" style="margin: 0">
           <a-input v-model="form.name" placeholder="value" />
-        </a-form-model-item>
+        </a-form-model-item> -->
+        <SubFormModal ref="subForm" v-for="txt in subFormList" :txt="txt" :key="txt" @delete="delDomain" />
       </div>
       <div class="AddField">
         <a-button class="button" type="dashed" style="width: 60%" @click="addDomain">
@@ -56,8 +57,11 @@
   </a-modal>
 </template>
 <script>
+import { mapState } from "vuex";
+import SubFormModal from './SubFormModal.vue'
 export default {
   components: {
+    SubFormModal
   },
   data() {
     return {
@@ -67,28 +71,70 @@ export default {
       labelCol: { span: 5 },
       wrapperCol: { span: 14 },
       form: {
-        name: '',
-        region: undefined,
-        date1: undefined,
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: '',
+        id: '', // name
+        override: false,
+        role: '',
+        count: 0
       },
+      title: '',
+      rowName: '',
+      subFormList:[],
     }
   },
+  computed: {
+    ...mapState({groups: (state) => state.groups })
+  },
   methods: {
-    showModal() {
-      console.log('我被调用了')
+    showModal(record, title) {
+      let groups = JSON.parse(JSON.stringify(this.groups))
+      const group = groups.filter(item => item.group_id == title)[0]
+      const rule = group.rules.filter(item => item.id == record.event.eventDescription)
+      console.log(record, '我被调用了', title)
+      this.title = title
+      this.rowName = record.event.eventDescription
+      this.form = rule[0] || {}
+      this.subFormList = rule[0].subFormList || []
       this.visible = true
     },
     handleCancel() {
       this.visible = false
       this.$refs.form.resetFields();
     },
-    handleOk() {},
+    handleOk() {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          const validTask = this.$refs.subForm.map(form=>form.onValid())
+          Promise.all(validTask).then(subFormData=>{
+            const data ={
+              ...this.form,
+              subForm: subFormData
+            }
+            let groups = JSON.parse(JSON.stringify(this.groups))
+            let newGroups = groups.map(item => {
+              if (item => item.group_id == this.title) {
+                item.rules = item.rules.map(ele => {
+                  if (ele.id == this.rowName) {
+                    return data
+                  } else {
+                    return ele
+                  }
+                })
+              }
+              return item
+            })
+            console.log(newGroups, 'newGroups')
+            this.$store.commit("setGroups", newGroups)
+            this.handleCancel()
+          })
+        } 
+      });
+      
+    },
     addDomain() {
-      this.$message.info('Not yet open！')
+      this.subFormList.push('subForm_'+ this.subFormList.length +'_'+new Date().valueOf())
+    },
+    delDomain(key){
+      this.subFormList = this.subFormList.filter(txt=>txt!==key)
     }
   }
 }
@@ -110,6 +156,8 @@ export default {
   border-radius: 5px;
   padding: 10px 0;
   margin: 0 30px;
+  max-height: 410px;
+  overflow-y: auto;
 }
 .AddField {
   margin-top: 20px;

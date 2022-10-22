@@ -172,7 +172,7 @@ export default Vue.extend({
   methods: {
     edit(data: Event) {
       // console.log(data, 'expanded');
-      (this.$refs.RuleFormModal as Vue & {showModal:Function}).showModal(data);
+      (this.$refs.RuleFormModal as Vue & {showModal:Function}).showModal(data, this.eventGroup.title);
     }
   }
 });
