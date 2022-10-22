@@ -1,7 +1,7 @@
 export const mockData = {
   "groups": [
     {
-      "tags": null,
+      "tags": [],
       "title": "pd",
       "range": {
         "min": "2022-01-01T00:00:00+08:00",
@@ -34,7 +34,7 @@ export const mockData = {
           },
           "event": {
             "eventDescription": "3 voters",
-            "tags": null,
+            "tags": [],
             "supplemental": null,
             "googlePhotosLink": "",
             "locations": null,
@@ -65,7 +65,7 @@ export const mockData = {
           },
           "event": {
             "eventDescription": "2 voters",
-            "tags": null,
+            "tags": [],
             "supplemental": null,
             "googlePhotosLink": "",
             "locations": null,
@@ -76,7 +76,7 @@ export const mockData = {
       ]
     },
     {
-      "tags": null,
+      "tags": [],
       "title": "tiflash",
       "range": {
         "min": "2022-01-06T00:00:00+08:00",
@@ -109,7 +109,7 @@ export const mockData = {
           },
           "event": {
             "eventDescription": "1 learner",
-            "tags": null,
+            "tags": [],
             "supplemental": null,
             "googlePhotosLink": "",
             "locations": null,
