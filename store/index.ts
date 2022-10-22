@@ -1077,7 +1077,7 @@ export const actions: ActionTree<State, State> = {
     const newString =
       es.slice(0, lastIndexOfLastEvent) +
       `\n group ${groupInfo.name}` +
-      `\n${dateRangeString}: #${groupInfo.tag} Event \n` +
+      `\n${dateRangeString}: ${groupInfo.eventName} #${groupInfo.tag}\n` +
       es.slice(lastIndexOfLastEvent);
 
     commit(MUTATION_SET_EVENTS_STRING, newString);
@@ -1098,11 +1098,25 @@ export const actions: ActionTree<State, State> = {
       : (getters.cascade as Cascade).metadata.endStringIndex;
 
     const es = state.eventsString || "";
+    let eventName = `Event${new Date().valueOf()}`
     const newString =
       es.slice(0, lastIndexOfLastEvent) +
-      `\n${dateRangeString}: Event\n` +
+      `\n${dateRangeString}: ${eventName}\n` +
       es.slice(lastIndexOfLastEvent);
-
+    let groups = JSON.parse(JSON.stringify(state.groups))
+    console.log(groups[groups.length - 1].rules, 'dateRangeString')
+    const rule = {
+      "group_id": groups[groups.length - 1].group_id,
+      "id": eventName,
+      "index": groups[groups.length - 1].rules.length + 1,
+      "override": false,
+      "start_key": "",
+      "end_key": "",
+      "role": "",
+      "count": 1
+    }
+    groups[groups.length - 1].rules.push(rule)
+    commit("setGroups", groups)
     commit(MUTATION_SET_EVENTS_STRING, newString);
   },
 };
