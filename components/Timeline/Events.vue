@@ -43,7 +43,7 @@
         ></event-row>
       </template>
     </div>
-    <div class="w-full relative mt-2" v-if="$store.state.editable && eventType === 'schema'">
+    <div class="w-full relative mt-2" v-if="$store.state.editable && eventType === 'rule'">
       <button
         title="Click and drag to create new event"
         class="

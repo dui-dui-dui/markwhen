@@ -15,7 +15,7 @@
       <!-- <template v-if="$store.state.editable">
         <sidebar v-show="$store.state.sidebar.visible"
       /></template> -->
-      <timeline eventType="schema" />
+      <timeline eventType="rule" />
     </div>
     <div class="h-10"></div>
     <div

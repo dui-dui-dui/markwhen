@@ -16,7 +16,7 @@
       :eventType="eventType"
     />
     <TimeMarkersFront :markers="markers" />
-    <template class="mt-10">
+    <template class="mt-10" v-if="eventType === 'rule'">
       <drawer-header />
       <resize-observer @notify="handleResize" />
     </template>
