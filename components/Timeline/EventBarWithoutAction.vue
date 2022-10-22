@@ -6,7 +6,7 @@
       class="absolute left-0 top-0 bottom-0 rounded-full percentBar transition"
       :class="percentBarColorClass"
       :style="`min-width: 10px; max-width: 100%; ${percentBarColorStyle}; width: ${percent}%;`"
-    >3 Voters</div>
+    >{{ event.event.eventDescription }}</div>
   </div>
 </template>
 
