@@ -16,12 +16,15 @@ import {
   Events,
   Range,
   Tags,
+  DateRangePart,
+  EventDescription
 } from "../src/Types"
 import { MutationTree, GetterTree, ActionTree } from "vuex"
 import { DateTime } from "luxon"
 import { exampleTimeline } from "./exampleTimeline"
 import { EditorView } from "@codemirror/view"
 import { EditorSelection } from "@codemirror/state"
+import { mockData } from './mock'
 
 interface DateInterval {
   from: DateTime
@@ -44,18 +47,7 @@ export const viewportLeftMarginPixels = 0
 export const timeMarkerWeightMinimum = 0.25
 
 const MOSTLEFTDATE = DateTime.now().startOf("day")
-
-const MARDKERS = [
-  "meta",
-  "system",
-  "test/foo",
-  "test/bar",
-  "test/baz",
-  "hackathon/happy",
-  "hackathon/lucky",
-  "hackathon/fun",
-  "default",
-]
+const MARDKERS = mockData.schemas
 
 let currentTimelineName = ""
 let list = [] as string[]
@@ -240,8 +232,8 @@ export const mutations: MutationTree<State> = {
   toggleSort(state: State, sort: Sort) {
     state.settings[state.cascadeIndex].sort =
       sorts[
-        (sorts.indexOf(state.settings[state.cascadeIndex].sort) + 1) %
-          sorts.length
+      (sorts.indexOf(state.settings[state.cascadeIndex].sort) + 1) %
+      sorts.length
       ]
   },
   setHasSeenHowTo(state: State, hasSeen: boolean) {
@@ -386,6 +378,8 @@ export function clamp(value: number, min: number = 0, max: number = 1) {
 }
 export const getters: GetterTree<State, State> = {
   cascades(state: State, getters: any): Cascade[] {
+    // console.log('state.eventsString', state.eventsString)
+    // console.log(parse(state.eventsString).cascades)
     return parse(state.eventsString).cascades
   },
   cascade(state: State, getters: any): Cascade {
@@ -446,13 +440,35 @@ export const getters: GetterTree<State, State> = {
   },
   filteredEvents(state: State, getters: any): Events {
     const events = getters.events as Events
-    // const _events = getPlacementRules()
-    // const events = placementRuleSchemaMap(_events)
-    console.log("in filteredEvents", events)
+    const _groups = mockData.groups
+    const finalEvents = []
+    let eg: EventSubGroup = []
+    for (const g of _groups) {
+      eg.range = {
+        min: DateTime.fromISO(g.range.min),
+        max: DateTime.fromISO(g.range.min),
+        latest: DateTime.fromISO(g.range.latest)
+      }
+      eg.tags = []
+      eg.title = g.title
+      eg.startExpanded = g.startExpanded
+      eg.style = "group"
+      eg.push(...g.events.map(e => {
+        const _ranges = {
+          event: e.ranges.event,
+          date: new DateRangePart(DateTime.fromISO(e.ranges.date.fromDateTime), DateTime.fromISO(e.ranges.date.toDateTime), e.ranges.date.originalString, e.ranges.date.dateRangeInText)
+        }
+        const _event = new EventDescription([])
+        return new Event(e.eventString, _ranges, _event)
+      }))
+    }
+    finalEvents.push(eg)
+    console.log("finalEvents", finalEvents)
 
     const filter = state.settings[state.cascadeIndex].filter
     if (filter.length === 0) {
       return events
+      // return eg
     }
 
     const filtered = []
@@ -647,7 +663,7 @@ export const getters: GetterTree<State, State> = {
       size: getters.distanceBetweenDates(leftViewportDate, nextLeft),
       left: getters.distanceBetweenDates(leftViewportDate, nextLeft),
       ts: leftViewportDate.toMillis(),
-      schema: MARDKERS[0],
+      schema: MARDKERS[0].name,
     })
 
     let markerIndex = 1
@@ -659,7 +675,7 @@ export const getters: GetterTree<State, State> = {
         size: 0,
         ts: nextLeft.toMillis(),
         left: getters.distanceBetweenDates(leftViewportDate, nextLeft),
-        schema: MARDKERS[markerIndex],
+        schema: MARDKERS[markerIndex].name,
       })
       if (scale === "decade") {
         nextLeft = nextLeft.plus({ years: 10 })
@@ -778,16 +794,14 @@ function dateTimeToString(
   if (isMonthStartOrEnd(dateTime, scale)) {
     if (isStartDate) {
       const adjustedForward = dateTime.plus({ days: 2 })
-      return `${
-        adjustedForward.month < 10
-          ? "0" + adjustedForward.month
-          : adjustedForward.month
-      }/${adjustedForward.year}`
+      return `${adjustedForward.month < 10
+        ? "0" + adjustedForward.month
+        : adjustedForward.month
+        }/${adjustedForward.year}`
     } else {
       const adjustedBack = dateTime.minus({ days: 2 })
-      return `${
-        adjustedBack.month < 10 ? "0" + adjustedBack.month : adjustedBack.month
-      }/${adjustedBack.year}`
+      return `${adjustedBack.month < 10 ? "0" + adjustedBack.month : adjustedBack.month
+        }/${adjustedBack.year}`
     }
   }
   if (isDayStartOrEnd(dateTime, scale)) {
@@ -919,8 +933,8 @@ export const actions: ActionTree<State, State> = {
     commit(
       MUTATION_SET_EVENTS_STRING,
       pre +
-        `${dateRangeToString(range, scale, getters.metadata.dateFormat)}:` +
-        post
+      `${dateRangeToString(range, scale, getters.metadata.dateFormat)}:` +
+      post
     )
   },
   addNewPage({ commit, state, getters }) {
@@ -978,7 +992,7 @@ export const actions: ActionTree<State, State> = {
     commit(
       MUTATION_SET_EVENTS_STRING,
       currentEventsString.substring(0, startIndex) +
-        currentEventsString.substring(endIndex)
+      currentEventsString.substring(endIndex)
     )
   },
   movePages({ commit, state, getters }, { from, to }) {

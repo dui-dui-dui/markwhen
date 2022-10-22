@@ -37,7 +37,7 @@ interface Event {
 ```
 
 ```JSON
-// example
+// event example
 
 {
     "event": {
@@ -69,7 +69,8 @@ interface Event {
 **Group Type**
 
 ```JS
-export interface EventSubGroup extends Array<Event> {
+export interface EventGroup  {
+  events: Event[],
   tags?: string[];
   title?: string;
   range?: {
@@ -82,9 +83,38 @@ export interface EventSubGroup extends Array<Event> {
 }
 ```
 
+const finalEvent = [Event, Event, tags: string, rang: {}]
+
 ```JSON
-// example
+// group example
 {
+    "events": [
+      {
+        "event": {
+            "eventDescription": "", // 默认为空字符串
+            "locations": [], // 默认为空数组
+            "supplemental": [], // 默认为空数组
+            "tags": [], // 默认为空数组
+        },
+        "eventString": "", // 对应 rule id
+        "ranges": {
+            "event": {
+                "from": "", // 应该跟 editor 日期 parse 有关系，还不确定。。
+                "to": "",// 应该跟 editor 日期 parse 有关系，还不确定。。
+                "type": "event", // 默认 event
+            },
+            "date": {
+                "fromDateTime": , // DateTime 类型，对齐 schema 的 from 和 to
+                "toDateTime": , // DateTime 类型，对齐 schema 的 to
+                "dateRangeInText": {
+                    "from": "", // 应该跟 editor 日期 parse 有关系，还不确定。。
+                    "to": "",// 应该跟 editor 日期 parse 有关系，还不确定。。
+                    "type": "dateRange", // 默认 dateRange
+                },
+            }
+        }
+      }
+    ],
     "range": {
         "min": , // DateTime, group 中最左 rule 对齐 的 schema 的 start 时间
         "max": , // DateTime, group 中最右 rule 对齐 的 schema 的 end 时间
@@ -96,6 +126,8 @@ export interface EventSubGroup extends Array<Event> {
     "title": "group_name", // 对应 group_id
 }
 ```
+
+**前端获得上面 json 之后，需要将 `events` push 到 Group 中**
 
 **Schema**
 
@@ -125,4 +157,3 @@ export interface Schema {
     "edd_key: ""
 }
 ```
-
