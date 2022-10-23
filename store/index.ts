@@ -195,6 +195,7 @@ export const mutations: MutationTree<State> = {
   },
   setRegions(state: State, regions) {
     state.regions = regions
+    console.log(state.regions)
   },
   setChoosingColor(state: State, choosingColor: boolean) {
     state.choosingColor = choosingColor;
@@ -716,6 +717,7 @@ export const getters: GetterTree<State, State> = {
     // console.log('leftmost marker', m(markers[0]))
     // console.log('rightmost marker', m(markers[markers.length - 1]))
     // console.log('')
+    console.log(111)
     return markers;
   },
 };
@@ -1098,7 +1100,7 @@ export const actions: ActionTree<State, State> = {
       : (getters.cascade as Cascade).metadata.endStringIndex;
 
     const es = state.eventsString || "";
-    let eventName = `Event${new Date().valueOf()}`
+    let eventName = `Rule${(Math.round(new Date().valueOf()/100))%100000}`
     const newString =
       es.slice(0, lastIndexOfLastEvent) +
       `\n${dateRangeString}: ${eventName}\n` +
