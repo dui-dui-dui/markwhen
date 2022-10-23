@@ -28,7 +28,7 @@
         </a-select>
       </a-form-model-item>
       <a-form-model-item label="Count" prop="count">
-        <a-input v-model="form.count" placeholder="Count" />
+        <a-input-number v-model="form.count" placeholder="Count" />
       </a-form-model-item>
       <a-form-model-item label="Override" prop="override">
         <a-switch v-model="form.override" />
@@ -93,13 +93,14 @@ export default {
       this.title = title
       this.rowName = record.event.eventDescription
       this.form = rule[0] || {}
-      if (rule[0].subForm) {
-        this.subFormList = rule[0].subForm.map((item, index) => {
+      if (rule[0].label_constraints) {
+        let subFormList = rule[0].label_constraints.map((item, index) => {
           return {
             ...item,
             id: 'subForm_'+ index +'_' + new Date().valueOf()
           }
         })
+        this.subFormList = JSON.parse(JSON.stringify(subFormList))
       }
       this.visible = true
     },
@@ -115,16 +116,15 @@ export default {
           }
           if (this.$refs.subForm) {
             const validTask = this.$refs.subForm.map(form=>form.onValid())
-            console.log(validTask, 'validTask')
             Promise.all(validTask).then(subFormData=> {
               let subForm = subFormData.map(item => {
                 return {
                   key: item.key,
                   op: item.op,
-                  value: item.value
+                  values: item.values
                 }
               })
-              data.subForm = subForm
+              data.label_constraints = JSON.parse(JSON.stringify(subForm))
             })
           }
           let groups = JSON.parse(JSON.stringify(this.groups))
@@ -140,6 +140,7 @@ export default {
             }
             return item
           })
+          console.log(newGroups, 'newGroupsnewGroups')
           this.$store.commit("setGroups", newGroups)
           this.handleCancel()
         } 
@@ -147,7 +148,12 @@ export default {
       
     },
     addDomain() {
-      this.subFormList.push({ id: 'subForm_'+ this.subFormList.length +'_'+new Date().valueOf()})
+      this.subFormList.push(
+        {
+          id: 'subForm_'+ this.subFormList.length +'_'+new Date().valueOf(),
+          // key: 
+        }
+      )
     },
     delDomain(key){
       this.subFormList = this.subFormList.filter(txt=>txt.id!==key)

@@ -92,7 +92,7 @@ interface State {
   hoveringEvent: Event | null;
   choosingColor: boolean;
   colors: Tags;
-  groups: Object[];
+  groups: object[];
   schemas: Schema[];
   regions: { markdown: string } | undefined;
 }
@@ -1083,9 +1083,9 @@ export const actions: ActionTree<State, State> = {
     const newString =
       es.slice(0, lastIndexOfLastEvent) +
       `\n group ${groupInfo.name}` +
-      `\n${dateRangeString}: ${groupInfo.eventName} #${groupInfo.tag}\n` +
+      `\n${dateRangeString}: ${groupInfo.eventName}\n` +
       es.slice(lastIndexOfLastEvent);
-
+      console.log(es.slice(lastIndexOfLastEvent), 'es.slice(lastIndexOfLastEvent)')
     commit(MUTATION_SET_EVENTS_STRING, newString);
   },
   createEventFromRange({ commit, state, getters }, range: OffsetRange) {
@@ -1104,7 +1104,7 @@ export const actions: ActionTree<State, State> = {
       : (getters.cascade as Cascade).metadata.endStringIndex;
 
     const es = state.eventsString || "";
-    let eventName = `Event${new Date().valueOf()}`
+    let eventName = `Rule${(Math.round(new Date().valueOf()/100))%100000}`
     const newString =
       es.slice(0, lastIndexOfLastEvent) +
       `\n${dateRangeString}: ${eventName}\n` +
