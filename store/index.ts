@@ -45,7 +45,7 @@ export const viewportLeftMarginPixels = 0;
 export const timeMarkerWeightMinimum = 0.25;
 
 const MOSTLEFTDATE = DateTime.now().startOf("year");
-const MARDKERS = mockData.schemas;
+// const MARKERS = mockData.schemas;
 
 let currentTimelineName = "";
 let list = [] as string[];
@@ -68,6 +68,14 @@ const colors: Tags = {
   warning: '#faad14',
   error: '#f5222d'
 }
+interface Schema {
+  ts: number,
+  name: string,
+  description: string,
+  start_key: string,
+  end_key: string
+}
+
 interface State {
   list: string[];
   currentTimelineName: string;
@@ -85,6 +93,8 @@ interface State {
   choosingColor: boolean;
   colors: Tags;
   groups: Object[];
+  schemas: Schema[];
+  regions: string | undefined;
 }
 
 export const state: () => State = () => ({
@@ -104,7 +114,9 @@ export const state: () => State = () => ({
   hoveringEvent: null as Event | null,
   choosingColor: false,
   colors: colors,
-  groups: []
+  groups: [],
+  schemas: [],
+  regions: ""
 });
 
 export type DisplayScale =
@@ -165,7 +177,7 @@ function blankSettings(): Settings {
     scale: initialScale,
     viewportDateInterval: {
       from: MOSTLEFTDATE,
-      to: MOSTLEFTDATE.plus({ days: MARDKERS.length }),
+      to: MOSTLEFTDATE.plus({ days: 0 }),
     },
     viewport: { left: 0, width: 100, top: 0 },
     sort: "none",
@@ -176,6 +188,13 @@ function blankSettings(): Settings {
 export const mutations: MutationTree<State> = {
   setGroups(state: State, groups) {
     state.groups = groups
+  },
+  setSchemas(state: State, schemas) {
+    console.log("schemas", schemas)
+    state.schemas = schemas
+  },
+  setRegions(state: State, regions) {
+    state.regions = regions
   },
   setChoosingColor(state: State, choosingColor: boolean) {
     state.choosingColor = choosingColor;
@@ -442,7 +461,6 @@ export const getters: GetterTree<State, State> = {
   filteredEvents(state: State, getters: any): Events {
     const events = getters.events as Events;
     const filter = state.settings[state.cascadeIndex].filter;
-    console.log('events', events)
     if (filter.length === 0) {
       return events;
     }
@@ -477,44 +495,15 @@ export const getters: GetterTree<State, State> = {
   },
 
   getRegions(state: State, getters: any): Events {
-    const parsedRegions = parse(exampleTimeline).cascades
-    const regionsCascade = parsedRegions[state.cascadeIndex]
-    const sortedRegions = sortEvents([...regionsCascade.events], getters.settings.sort) as Events
-    // const events = getters.events as Events;
-    console.log('sortedRegions', sortedRegions)
-
-    // const filter = state.settings[state.cascadeIndex].filter;
-    // if (filter.length === 0) {
-      return sortedRegions
-    // }
-
-    // const filtered = [];
-    // for (const eventOrEvents of events) {
-    //   if (eventOrEvents instanceof Event) {
-    //     if (eventOrEvents.event.tags.some((tag) => filter.includes(tag))) {
-    //       filtered.push(eventOrEvents);
-    //     }
-    //   } else {
-    //     const group = eventOrEvents as EventSubGroup;
-    //     if (group.tags?.some((tag) => filter.includes(tag))) {
-    //       filtered.push(group);
-    //     } else {
-    //       const filteredSubEvents: EventSubGroup = group.filter((event) =>
-    //         event.event.tags.some((tag) => filter.includes(tag))
-    //       );
-    //       if (filteredSubEvents.length) {
-    //         filteredSubEvents.range = group.range;
-    //         filteredSubEvents.tags = group.tags;
-    //         filteredSubEvents.title = group.title;
-    //         filteredSubEvents.startExpanded = group.startExpanded;
-    //         filteredSubEvents.style = group.style;
-    //         filtered.push(filteredSubEvents);
-    //       }
-    //     }
-    //   }
-    // }
-    // sortEvents(filtered, getters.settings.sort);
-    // return filtered;
+    let regions = [] as Events
+    if(state.regions != undefined) {
+      const parsedRegions = parse(exampleTimeline).cascades
+      const regionsCascade = parsedRegions[state.cascadeIndex]
+      const sortedRegions = sortEvents([...regionsCascade.events], getters.settings.sort) as Events
+      regions = sortedRegions
+      console.log('sd', sortedRegions)
+    }
+    return regions
   },
   tags(state: State, getters: any): Tags {
     return state.colors;
@@ -556,7 +545,7 @@ export const getters: GetterTree<State, State> = {
         [diffScale]: getters.settings.viewport.left / getters.settings.scale,
       });
       return leftDate.plus({
-        // days: offset / (getters.settings.viewport.width/ MARDKERS.length),
+        // days: offset / (getters.settings.viewport.width/ MARKERS.length),
         days: offset / getters.settings.scale,
       });
     };
@@ -583,7 +572,7 @@ export const getters: GetterTree<State, State> = {
     // return floorDateTime(earliestTime.minus({ days }), "year");
   },
   baselineRightmostDate(state: State, getters: any) {
-    const lastTime = MOSTLEFTDATE.plus({ days: MARDKERS.length });
+    const lastTime = MOSTLEFTDATE.plus({ days: state.schemas.length });
     return floorDateTime(lastTime.plus({ days: 1 }), "day");
   },
   distanceBetweenBaselineDates(state: State, getters: any) {
@@ -623,11 +612,17 @@ export const getters: GetterTree<State, State> = {
         [diffScale]: 0,
       });
       const rightDate = earliest.plus({
-        [diffScale]: MARDKERS.length,
+        [diffScale]: state.schemas.length,
       });
       return { from: leftDate, to: rightDate };
     };
   },
+  // recalTimerMarker(state: State, getters: any){
+  //   if (state.schemas != undefined) {
+  //     timeMarkers(),
+  //   }
+  // },
+
   timeMarkerWeights(state: State, getters: any): TimeMarkerWeights {
     const diff = getters.viewportDateInterval.to
       .diff(getters.viewportDateInterval.from)
@@ -666,6 +661,9 @@ export const getters: GetterTree<State, State> = {
     return "day";
   },
   timeMarkers(state: State, getters: any): TimeMarker[] {
+    if (state.schemas != undefined) {
+      console.log("updated schemas", state.schemas)
+    }
     const markers = [] as TimeMarker[];
     const scale = getters.scaleOfViewportDateInterval as DisplayScale;
     const {
@@ -675,42 +673,44 @@ export const getters: GetterTree<State, State> = {
 
     let nextLeft = ceilDateTime(leftViewportDate, scale);
     let rightmost = ceilDateTime(rightViewportDate, scale);
-    markers.push({
-      dateTime: leftViewportDate,
-      size: getters.distanceBetweenDates(leftViewportDate, nextLeft),
-      left: getters.distanceBetweenDates(leftViewportDate, nextLeft),
-      ts: leftViewportDate.toMillis(),
-      schema: MARDKERS[0].name,
-    });
-
-    let markerIndex = 1;
-
-    // 256 is an arbitrary number
-    while (nextLeft < rightmost && markerIndex < MARDKERS.length) {
+    if(state.schemas.length > 0) {
       markers.push({
-        dateTime: nextLeft,
-        size: 0,
-        ts: nextLeft.toMillis(),
+        dateTime: leftViewportDate,
+        size: getters.distanceBetweenDates(leftViewportDate, nextLeft),
         left: getters.distanceBetweenDates(leftViewportDate, nextLeft),
-        schema: MARDKERS[markerIndex].name,
+        ts: leftViewportDate.toMillis(),
+        schema: state.schemas[0].name,
       });
-      if (scale === "decade") {
-        nextLeft = nextLeft.plus({ years: 10 });
-      } else {
-        nextLeft = nextLeft.plus({ [scale]: 1 });
+  
+      let markerIndex = 1;
+  
+      // 256 is an arbitrary number
+      while (nextLeft < rightmost && markerIndex < state.schemas.length) {
+        markers.push({
+          dateTime: nextLeft,
+          size: 0,
+          ts: nextLeft.toMillis(),
+          left: getters.distanceBetweenDates(leftViewportDate, nextLeft),
+          schema: state.schemas[markerIndex].name,
+        });
+        if (scale === "decade") {
+          nextLeft = nextLeft.plus({ years: 10 });
+        } else {
+          nextLeft = nextLeft.plus({ [scale]: 1 });
+        }
+        markers[markers.length - 1].size = getters.distanceBetweenDates(
+          markers[markers.length - 1].dateTime,
+          nextLeft
+        );
+        markerIndex++;
       }
+  
+      // Get the last one
       markers[markers.length - 1].size = getters.distanceBetweenDates(
         markers[markers.length - 1].dateTime,
-        nextLeft
+        rightmost
       );
-      markerIndex++;
     }
-
-    // Get the last one
-    markers[markers.length - 1].size = getters.distanceBetweenDates(
-      markers[markers.length - 1].dateTime,
-      rightmost
-    );
     // console.log('from', leftViewportDate.toLocaleString(), 'to', rightViewportDate.toLocaleString())
     // console.log('num markers:', markers.length)
     // console.log('leftmost marker', m(markers[0]))
@@ -891,14 +891,14 @@ export const actions: ActionTree<State, State> = {
       store.commit("setTimelinePath", context.req.timelinePath);
     }
   },
-  setViewport({ commit, getters }, viewport: Viewport) {
+  setViewport({ state, commit, getters }, viewport: Viewport) {
     const viewportInterval = getters.setDateIntervalFromViewport(
       viewport.left,
       viewport.width
     );
     commit("setViewport", viewport);
     commit("setViewportDateInterval", viewportInterval);
-    commit("setScale", viewport.width / MARDKERS.length);
+    commit("setScale", viewport.width / state.schemas.length);
   },
   moveEventUpOrDown(
     { state, commit, getters },
