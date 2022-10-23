@@ -35,7 +35,13 @@ export default Vue.extend({
         return this.$store.getters.tags[this.event.event.tags[0]];
         // return this.$store.getters.tags['pink'];
       } else {
-        return this.event.event.eventDescription === 'Leader' ? '235, 58, 52' : '137, 148, 232' 
+        if (this.event.event.eventDescription === 'Leader') {
+          return '150, 150, 0'
+        }
+        if (this.event.event.eventDescription === 'Follower') {
+          return '0, 50, 100'
+        }
+        return '255, 0, 0'
       }
       console.log(this.event, 'this.event.event.tags[0]this.event.event.tags[0]')
       return undefined;
