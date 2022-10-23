@@ -28,7 +28,7 @@
         </a-select>
       </a-form-model-item>
       <a-form-model-item label="Count" prop="count">
-        <a-input v-model="form.count" placeholder="Count" />
+        <a-input-number v-model="form.count" placeholder="Count" />
       </a-form-model-item>
       <a-form-model-item label="Override" prop="override">
         <a-switch v-model="form.override" />
@@ -115,7 +115,6 @@ export default {
           }
           if (this.$refs.subForm) {
             const validTask = this.$refs.subForm.map(form=>form.onValid())
-            console.log(validTask, 'validTask')
             Promise.all(validTask).then(subFormData=> {
               let subForm = subFormData.map(item => {
                 return {
@@ -140,6 +139,7 @@ export default {
             }
             return item
           })
+          console.log(newGroups, 'newGroupsnewGroups')
           this.$store.commit("setGroups", newGroups)
           this.handleCancel()
         } 
@@ -147,7 +147,12 @@ export default {
       
     },
     addDomain() {
-      this.subFormList.push({ id: 'subForm_'+ this.subFormList.length +'_'+new Date().valueOf()})
+      this.subFormList.push(
+        {
+          id: 'subForm_'+ this.subFormList.length +'_'+new Date().valueOf(),
+          // key: 
+        }
+      )
     },
     delDomain(key){
       this.subFormList = this.subFormList.filter(txt=>txt.id!==key)
