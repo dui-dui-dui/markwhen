@@ -195,6 +195,7 @@ export const mutations: MutationTree<State> = {
   },
   setRegions(state: State, regions) {
     state.regions = regions
+    console.log(state.regions)
   },
   setChoosingColor(state: State, choosingColor: boolean) {
     state.choosingColor = choosingColor;
@@ -716,6 +717,7 @@ export const getters: GetterTree<State, State> = {
     // console.log('leftmost marker', m(markers[0]))
     // console.log('rightmost marker', m(markers[markers.length - 1]))
     // console.log('')
+    console.log(111)
     return markers;
   },
 };

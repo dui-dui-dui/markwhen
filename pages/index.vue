@@ -11,7 +11,6 @@ import { NuxtCookies } from "cookie-universal-nuxt";
 export default Vue.extend({
   async asyncData({ app }) {
     let { data: configData } = await app.$axios.get('http://127.0.0.1:8080/config')
-    let { data: regionData } = await app.$axios.get('http://127.0.0.1:8080/region')
     let groups = configData.groups
     let markdown = configData.markdown
     let labels = configData.labels
@@ -22,7 +21,7 @@ export default Vue.extend({
       markdown,
       labels,
       schemas,
-      regions: regionData
+      regions: []
     }
   },
   head() {
@@ -69,20 +68,46 @@ export default Vue.extend({
       result: '',
       labels: [],
       schemas: [],
-      regions: []
+      regions: [],
+      pollingTimer: null,
     }
   },
   computed: mapGetters(["metadata"]),
   mounted() {
-    this.init()
-  },
-  methods: {
-    init() {
-      this.$store.commit("setEventsString", this.markdown);
+      this.$store.commit("setEventsString",this.markdown);
       this.$store.commit("setGroups", this.groups)
       this.$store.commit("setSchemas", this.schemas)
-      this.$store.commit('setRegions', this.regions)
+    this.init()
+    this.fetchReions()
+    this.polling()
+  },
+  destroyed() {
+    clearTimeout(this.pollingTimer as any)
+  },
+  methods: {
+    async init() {
+    let { data: configData } = await this.$axios.get('http://127.0.0.1:8080/config')
+    let groups = configData.groups
+    let markdown = configData.markdown
+    let labels = configData.labels
+    let schemas = configData.schemas
+      this.$store.commit("setEventsString", markdown);
+      this.$store.commit("setGroups", groups)
+      this.$store.commit("setSchemas", schemas)
+      this.$forceUpdate()
     },
+    polling() {
+      this.pollingTimer = setTimeout(async() => {
+        await this.fetchReions()
+      this.polling()
+      }, 5000) as any
+    },
+    async fetchReions() {
+
+      let { data: regionData } = await this.$axios.get('http://127.0.0.1:8080/region')
+      
+      this.$store.commit('setRegions', regionData)
+    }
   }
 });
 </script>
