@@ -1100,7 +1100,7 @@ export const actions: ActionTree<State, State> = {
       : (getters.cascade as Cascade).metadata.endStringIndex;
 
     const es = state.eventsString || "";
-    let eventName = `Event${new Date().valueOf()}`
+    let eventName = `Rule${(Math.round(new Date().valueOf()/100))%100000}`
     const newString =
       es.slice(0, lastIndexOfLastEvent) +
       `\n${dateRangeString}: ${eventName}\n` +
