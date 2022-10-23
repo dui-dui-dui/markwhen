@@ -93,13 +93,14 @@ export default {
       this.title = title
       this.rowName = record.event.eventDescription
       this.form = rule[0] || {}
-      if (rule[0].subForm) {
-        this.subFormList = rule[0].subForm.map((item, index) => {
+      if (rule[0].label_constraints) {
+        let subFormList = rule[0].label_constraints.map((item, index) => {
           return {
             ...item,
             id: 'subForm_'+ index +'_' + new Date().valueOf()
           }
         })
+        this.subFormList = JSON.parse(JSON.stringify(subFormList))
       }
       this.visible = true
     },
@@ -123,7 +124,7 @@ export default {
                   value: item.value
                 }
               })
-              data.subForm = subForm
+              data.label_constraints = subForm
             })
           }
           let groups = JSON.parse(JSON.stringify(this.groups))
