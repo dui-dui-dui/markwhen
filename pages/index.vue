@@ -16,7 +16,7 @@ export default Vue.extend({
     let labels = data.labels
     let schemas = data.schemas
     return {
-      result: data,
+      result: null,
       groups,
       markdown,
       labels,
@@ -77,6 +77,7 @@ export default Vue.extend({
     init() {
       this.$store.commit("setEventsString", this.markdown);
       this.$store.commit("setGroups", this.groups)
+      this.$store.commit("setSchemas", this.schemas)
     },
   }
 });
