@@ -154,7 +154,7 @@
           </button>
         </div> -->
         <a-button class="noBorder mr-2" type="" @click="handleClick">CreateGroup</a-button>
-        <!-- <a-button class="noBorder" type="" @click="handleClickRule">Rule Config</a-button> -->
+        <a-button class="noBorder" :loading="confirmLoading" @click="submit">Save</a-button>
         <!-- <tags></tags> -->
       </div>
     </div>
@@ -168,7 +168,7 @@ import Tags from "./Tags.vue";
 import DisplaySettings from "./DisplaySettings.vue";
 import Vue from "vue";
 import Sort from "./Sort.vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import CascadeButtons from "./CascadeButtons.vue";
 import GroupModal from './GroupModal.vue'
 
@@ -180,8 +180,17 @@ export default Vue.extend({
     CascadeButtons,
     GroupModal
   },
+  data() {
+    return {
+      confirmLoading: false,
+    }
+  },
   computed: {
     ...mapGetters(["metadata", "sidebar/darkMode"]),
+    ...mapState({
+      groups: (state) => state.groups,
+      eventsString: (state) => state.eventsString
+    }),
     showNowLine(): boolean {
       return !this.$store.state.sidebar.hideNowLine;
     },
@@ -220,6 +229,17 @@ export default Vue.extend({
       document.removeEventListener("touchmove", this.resizeYMove);
       document.removeEventListener("touchend", this.resizeYEnd);
     },
+    submit() {
+      const values = {
+        groups: this.groups,
+        markdown: this.eventsString
+      }
+      this.confirmLoading = true
+      this.$axios.$post('/save', values).then(res => {
+        this.confirmLoading = false
+        this.$message.success('Success!')
+      })
+    }
   },
 });
 </script>
