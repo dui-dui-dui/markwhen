@@ -496,8 +496,6 @@ export const getters: GetterTree<State, State> = {
 
   getRegions(state: State, getters: any): Events {
     let regions = [] as Events
-    console.log('state.regions', state.regions)
-
     if (!state.regions) {
       return []
     }
@@ -671,8 +669,6 @@ export const getters: GetterTree<State, State> = {
       to: rightViewportDate,
     } = getters.viewportDateInterval as DateInterval;
 
-    console.log('leftViewportDate', leftViewportDate, rightViewportDate)
-
     let nextLeft = ceilDateTime(leftViewportDate, scale);
     let rightmost = ceilDateTime(rightViewportDate, scale);
     if(state.schemas.length > 0) {
@@ -687,7 +683,6 @@ export const getters: GetterTree<State, State> = {
       let markerIndex = 1;
   
       // 256 is an arbitrary number
-      console.log('state.schemas.length', nextLeft, rightmost, markerIndex, state.schemas.length)
       while (markerIndex < state.schemas.length) {
         markers.push({
           dateTime: nextLeft,
@@ -719,8 +714,6 @@ export const getters: GetterTree<State, State> = {
     // console.log('leftmost marker', m(markers[0]))
     // console.log('rightmost marker', m(markers[markers.length - 1]))
     // console.log('')
-    console.log('timMarkers', markers)
-
     return markers;
   },
 };
@@ -901,10 +894,9 @@ export const actions: ActionTree<State, State> = {
       viewport.left,
       viewport.width
     );
-    console.log('in viewport', viewport, viewportInterval)
     commit("setViewport", viewport);
     commit("setViewportDateInterval", viewportInterval);
-    commit("setScale", viewport.width / state.schemas.length);
+    commit("setScale", viewport.width / 8);
   },
   moveEventUpOrDown(
     { state, commit, getters },
