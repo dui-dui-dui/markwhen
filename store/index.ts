@@ -94,7 +94,7 @@ interface State {
   colors: Tags;
   groups: Object[];
   schemas: Schema[];
-  regions: string | undefined;
+  regions: { markdown: string } | undefined;
 }
 
 export const state: () => State = () => ({
@@ -116,7 +116,7 @@ export const state: () => State = () => ({
   colors: colors,
   groups: [],
   schemas: [],
-  regions: ""
+  regions: { markdown: ''}
 });
 
 export type DisplayScale =
@@ -177,7 +177,7 @@ function blankSettings(): Settings {
     scale: initialScale,
     viewportDateInterval: {
       from: MOSTLEFTDATE,
-      to: MOSTLEFTDATE.plus({ days: 0 }),
+      to: MOSTLEFTDATE.plus({ days: 10 }),
     },
     viewport: { left: 0, width: 100, top: 0 },
     sort: "none",
@@ -190,12 +190,10 @@ export const mutations: MutationTree<State> = {
     state.groups = groups
   },
   setSchemas(state: State, schemas) {
-    console.log("schemas", schemas)
     state.schemas = schemas
   },
   setRegions(state: State, regions) {
     state.regions = regions
-    console.log(state.regions)
   },
   setChoosingColor(state: State, choosingColor: boolean) {
     state.choosingColor = choosingColor;
@@ -338,6 +336,7 @@ export const mutations: MutationTree<State> = {
     }
   },
   setViewportDateInterval(state: State, interval: DateInterval) {
+    console.log(' ind set invetreal', interval)
     state.settings[state.cascadeIndex].viewportDateInterval = interval;
   },
   setViewport(state: State, viewport: Viewport) {
@@ -497,13 +496,16 @@ export const getters: GetterTree<State, State> = {
 
   getRegions(state: State, getters: any): Events {
     let regions = [] as Events
-    if(state.regions != undefined) {
-      const parsedRegions = parse(exampleTimeline).cascades
-      const regionsCascade = parsedRegions[state.cascadeIndex]
-      const sortedRegions = sortEvents([...regionsCascade.events], getters.settings.sort) as Events
-      regions = sortedRegions
-      console.log('sd', sortedRegions)
+    console.log('state.regions', state.regions)
+
+    if (!state.regions) {
+      return []
     }
+
+    const parsedRegions = parse(state.regions.markdown).cascades
+    const regionsCascade = parsedRegions[state.cascadeIndex]
+    const sortedRegions = sortEvents([...regionsCascade.events], getters.settings.sort) as Events
+    regions = sortedRegions
     return regions
   },
   tags(state: State, getters: any): Tags {
@@ -613,7 +615,7 @@ export const getters: GetterTree<State, State> = {
         [diffScale]: 0,
       });
       const rightDate = earliest.plus({
-        [diffScale]: state.schemas.length,
+        [diffScale]: 10,
       });
       return { from: leftDate, to: rightDate };
     };
@@ -662,15 +664,14 @@ export const getters: GetterTree<State, State> = {
     return "day";
   },
   timeMarkers(state: State, getters: any): TimeMarker[] {
-    if (state.schemas != undefined) {
-      console.log("updated schemas", state.schemas)
-    }
     const markers = [] as TimeMarker[];
     const scale = getters.scaleOfViewportDateInterval as DisplayScale;
     const {
       from: leftViewportDate,
       to: rightViewportDate,
     } = getters.viewportDateInterval as DateInterval;
+
+    console.log('leftViewportDate', leftViewportDate, rightViewportDate)
 
     let nextLeft = ceilDateTime(leftViewportDate, scale);
     let rightmost = ceilDateTime(rightViewportDate, scale);
@@ -686,7 +687,8 @@ export const getters: GetterTree<State, State> = {
       let markerIndex = 1;
   
       // 256 is an arbitrary number
-      while (nextLeft < rightmost && markerIndex < state.schemas.length) {
+      console.log('state.schemas.length', nextLeft, rightmost, markerIndex, state.schemas.length)
+      while (markerIndex < state.schemas.length) {
         markers.push({
           dateTime: nextLeft,
           size: 0,
@@ -707,17 +709,18 @@ export const getters: GetterTree<State, State> = {
       }
   
       // Get the last one
-      markers[markers.length - 1].size = getters.distanceBetweenDates(
-        markers[markers.length - 1].dateTime,
-        rightmost
-      );
+      // markers[markers.length - 1].size = getters.distanceBetweenDates(
+      //   markers[markers.length - 1].dateTime,
+      //   rightmost
+      // );
     }
     // console.log('from', leftViewportDate.toLocaleString(), 'to', rightViewportDate.toLocaleString())
     // console.log('num markers:', markers.length)
     // console.log('leftmost marker', m(markers[0]))
     // console.log('rightmost marker', m(markers[markers.length - 1]))
     // console.log('')
-    console.log(111)
+    console.log('timMarkers', markers)
+
     return markers;
   },
 };
@@ -898,6 +901,7 @@ export const actions: ActionTree<State, State> = {
       viewport.left,
       viewport.width
     );
+    console.log('in viewport', viewport, viewportInterval)
     commit("setViewport", viewport);
     commit("setViewportDateInterval", viewportInterval);
     commit("setScale", viewport.width / state.schemas.length);

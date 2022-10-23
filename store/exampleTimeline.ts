@@ -1,2 +1,58 @@
 
-export const exampleTimeline = `section store 1\n\n01/01/2022: Follower\n01/08/2022: Follower\n\nsection store 4\n\n01/01/2022: Follower\n01/02/2022: Leader\n01/03/2022: Leader\n01/04/2022: Leader\n01/05/2022: Leader\n01/06/2022: Follower\n01/07/2022: Leader\n01/08/2022: Follower\n\nsection store 5\n\n01/02/2022: Follower\n01/03/2022: Follower\n01/04/2022: Follower\n01/05/2022: Follower\n01/06/2022: Follower\n\nsection store 6\n\n01/01/2022: Leader\n01/06/2022: Learner\n01/07/2022: Follower\n01/08/2022: Leader\n\nsection store 7\n\n01/01/2022: Follower\n01/02/2022: Follower\n01/03/2022: Follower\n01/04/2022: Follower\n01/05/2022: Follower\n01/06/2022: Leader\n01/07/2022: Follower\n01/08/2022: Follower\n\nsection store 8\n\n01/01/2022: Follower\n01/08/2022: Follower\n\n`;
+export const exampleTimeline = `
+"section Store #1
+
+1/2/2022: Follower
+1/4/2022: Learner
+1/5/2022: Follower
+1/8/2022: Follower
+
+section Store #4
+
+1/4/2022: Follower
+1/6/2022: Leader
+1/8/2022: Leader
+
+section Store #5
+
+1/1/2022: Leader
+1/2/2022: Leader
+1/3/2022: Learner
+1/4/2022: Leader
+1/8/2022: Learner
+
+section Store #6
+
+1/1/2022: Follower
+1/3/2022: Leader
+1/4/2022: Follower
+1/5/2022: Learner
+1/7/2022: Follower
+
+section Store #7
+
+1/2/2022: Learner
+1/3/2022: Follower
+1/5/2022: Follower
+1/6/2022: Follower
+1/7/2022: Learner
+1/8/2022: Follower
+
+section Store #8
+
+1/2/2022: Follower
+1/4/2022: Follower
+1/5/2022: Leader
+1/7/2022: Leader
+
+section Store #9
+
+1/3/2022: Follower
+1/7/2022: Follower
+
+section Store #10
+
+1/1/2022: Follower
+1/7/2022: Follower
+
+"`

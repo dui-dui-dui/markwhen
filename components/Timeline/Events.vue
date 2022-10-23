@@ -118,6 +118,9 @@ export default Vue.extend({
   watch: {
     filteredEvents(val) {
       console.log(val, 'filteredEvents')
+    },
+    getRegions(prev, cur) {
+      console.log('getRegions====',prev, cur, prev=== cur)
     }
   },
   methods: {
