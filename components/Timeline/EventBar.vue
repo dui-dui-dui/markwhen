@@ -82,9 +82,6 @@ export default Vue.extend({
     },
     percentBarColorStyle(): string {
       let style = "color: white; text-align: center;";
-      if (this.tagColor) {
-        style += ` background-color: rgba(${this.tagColor}, 0.8)`;
-      }
       if (this.rule.role === "leader") {
         style += ` background-color: rgba(150,150,0,0.8)`;
       } else if (this.rule.role == "follower") {
