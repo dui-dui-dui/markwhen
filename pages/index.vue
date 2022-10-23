@@ -10,17 +10,19 @@ import { NuxtCookies } from "cookie-universal-nuxt";
 
 export default Vue.extend({
   async asyncData({ app }) {
-    let { data } = await app.$axios.get('http://127.0.0.1:8080/config')
-    let groups = data.groups
-    let markdown = data.markdown
-    let labels = data.labels
-    let schemas = data.schemas
+    let { data: configData } = await app.$axios.get('http://127.0.0.1:8080/config')
+    let { data: regionData } = await app.$axios.get('http://127.0.0.1:8080/region')
+    let groups = configData.groups
+    let markdown = configData.markdown
+    let labels = configData.labels
+    let schemas = configData.schemas
     return {
-      result: data,
+      result: configData,
       groups,
       markdown,
       labels,
-      schemas
+      schemas,
+      regions: regionData
     }
   },
   head() {
@@ -66,7 +68,8 @@ export default Vue.extend({
       groups: [],
       result: '',
       labels: [],
-      schemas: []
+      schemas: [],
+      regions: []
     }
   },
   computed: mapGetters(["metadata"]),
@@ -77,6 +80,8 @@ export default Vue.extend({
     init() {
       this.$store.commit("setEventsString", this.markdown);
       this.$store.commit("setGroups", this.groups)
+      this.$store.commit("setSchemas", this.schemas)
+      this.$store.commit('setRegions', this.regions)
     },
   }
 });

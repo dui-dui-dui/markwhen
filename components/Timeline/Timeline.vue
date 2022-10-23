@@ -137,7 +137,7 @@ export default Vue.extend({
     eventsStyle(): string {
       return `cursor: ${this.panStartX ? "grabbing" : "grab"};`;
     },
-    ...mapGetters(["timeMarkers", "settings", "rangeFromOffsetLeft"]),
+    ...mapGetters(["timeMarkers", "settings", "rangeFromOffsetLeft", "getRegions"]),
     isRight(): boolean {
       return this.$store.state.sidebar.position === "right";
     },
