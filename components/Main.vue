@@ -44,7 +44,7 @@ import {
 } from "firebase/auth";
 import Sidebar from "./Drawer/Sidebar.vue";
 import { mapGetters } from "vuex";
-import { result } from './sourceData';
+// import { result } from './sourceData';
 
 export default Vue.extend({
   components: { Timeline, Sidebar },
@@ -55,18 +55,12 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.init();
     this.checkDarkMode();
     this.$store.commit("getLocalTimelines");
     this.$store.commit("checkHasSeenHowTo");
     // this.signInIfNecessary();
   },
   methods: {
-    init() {
-      console.log(result, 'result')
-      this.$store.commit("setEventsString", result.markdown);
-      this.$store.commit("setGroups", result.groups)
-    },
     checkDarkMode() {
       this.$store.commit("sidebar/checkDarkMode");
       this.$cookies.set("theme", this.$store.getters["sidebar/darkMode"]);

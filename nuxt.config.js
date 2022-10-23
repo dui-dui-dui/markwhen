@@ -71,8 +71,17 @@ export default {
     browserBaseUrl: "/",
     proxyHeaders: false,
     credentials: false,
+    // prefix: '/api',
+    // proxy: true
   },
-
+  // proxy: {
+  //   '/api': {
+  //     target: 'locahost:',
+  //     pathRewrite: {
+  //       '^/api': ''
+  //     }
+  //   }
+  // },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     // transpile: ["nuxt-hammer"]

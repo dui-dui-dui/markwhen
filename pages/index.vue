@@ -9,6 +9,20 @@ import { mapGetters } from "vuex";
 import { NuxtCookies } from "cookie-universal-nuxt";
 
 export default Vue.extend({
+  async asyncData({ app }) {
+    let { data } = await app.$axios.get('http://127.0.0.1:8080/config')
+    let groups = data.groups
+    let markdown = data.markdown
+    let labels = data.labels
+    let schemas = data.schemas
+    return {
+      result: data,
+      groups,
+      markdown,
+      labels,
+      schemas
+    }
+  },
   head() {
     const meta = [
       {
@@ -46,6 +60,24 @@ export default Vue.extend({
     }
   },
   components: { Main },
+  data() {
+    return {
+      markdown: '',
+      groups: [],
+      result: '',
+      labels: [],
+      schemas: []
+    }
+  },
   computed: mapGetters(["metadata"]),
+  mounted() {
+    this.init()
+  },
+  methods: {
+    init() {
+      this.$store.commit("setEventsString", this.markdown);
+      this.$store.commit("setGroups", this.groups)
+    },
+  }
 });
 </script>
