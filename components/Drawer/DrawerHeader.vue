@@ -188,8 +188,8 @@ export default Vue.extend({
   computed: {
     ...mapGetters(["metadata", "sidebar/darkMode"]),
     ...mapState({
-      groups: (state) => state.groups,
-      eventsString: (state) => state.eventsString
+      groups: (state: any) => state.groups,
+      eventsString: (state: any) => state.eventsString
     }),
     showNowLine(): boolean {
       return !this.$store.state.sidebar.hideNowLine;
