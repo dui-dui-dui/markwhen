@@ -11,7 +11,7 @@
       <a-form-model-item label="Group name" prop="name">
         <a-input v-model="form.name" />
       </a-form-model-item>
-      <a-form-model-item label="Event name" prop="eventName">
+      <a-form-model-item label="Rule name" prop="eventName">
         <a-input v-model="form.eventName" />
       </a-form-model-item>
       <a-form-model-item label="Override" prop="override">
