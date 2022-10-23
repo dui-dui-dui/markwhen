@@ -100,7 +100,7 @@ export default Vue.extend({
       this.pollingTimer = setTimeout(async() => {
         await this.fetchReions()
       this.polling()
-      }, 5000) as any
+      }, 3000) as any
     },
     async fetchReions() {
 
