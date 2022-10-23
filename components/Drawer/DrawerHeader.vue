@@ -235,9 +235,11 @@ export default Vue.extend({
         markdown: this.eventsString
       }
       this.confirmLoading = true
-      this.$axios.$post('/save', values).then(res => {
+      this.$axios.$post('http://127.0.0.1:8080/save', values).then(res => {
         this.confirmLoading = false
         this.$message.success('Success!')
+      }).catch(err => {
+        this.confirmLoading = false
       })
     }
   },
