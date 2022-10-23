@@ -121,10 +121,10 @@ export default {
                 return {
                   key: item.key,
                   op: item.op,
-                  value: item.value
+                  values: item.values
                 }
               })
-              data.label_constraints = subForm
+              data.label_constraints = JSON.parse(JSON.stringify(subForm))
             })
           }
           let groups = JSON.parse(JSON.stringify(this.groups))

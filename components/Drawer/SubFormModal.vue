@@ -32,7 +32,7 @@
       <!-- <a-input placeholder="Op" v-decorator="['op', validatorRules.string ]"/> -->
     </a-form-item>
     <a-form-item label="Value" style="margin-bottom: 0">
-      <a-select placeholder="please select Value" mode="multiple" v-decorator="['value', validatorRules.string ]">
+      <a-select placeholder="please select Value" mode="multiple" v-decorator="['values', validatorRules.string ]">
         <a-select-option :value="item" v-for="item in options" :key="item">
           {{ item }}
         </a-select-option>
