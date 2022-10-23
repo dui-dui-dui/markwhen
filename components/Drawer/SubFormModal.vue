@@ -52,6 +52,7 @@ export default {
   data(){
     return {
       form: this.$form.createForm(this),
+      options: [],
       diskOptions: ['hdd', 'ssd'],
       zoneOptions: ['zone-1', 'zone-2', 'zone-3'],
       engineOptions: ['tikv', 'tiflash'],
@@ -62,22 +63,8 @@ export default {
       }
     }
   },
-  computed: {
-    // options() {
-    //   let options = []
-    //   if (this.form.value == 'zone') {
-    //     options = this.zoneOptions
-    //   } else if(this.form.value == 'disk') {
-    //     options = this.diskOptions
-    //   } else if(this.form.value == 'engine') {
-    //     options = this.engineOptions
-    //   }
-    //   console.log(options, 'options')
-    //   return options
-    // }
-  },
   mounted() {
-    this.form.setFieldsValue(this.formData)
+    this.form.setFieldsValue({ key: this.formData.key, op: this.formData.op, values: this.formData.values})
   },
   methods:{
     onValid(){

@@ -156,7 +156,7 @@ export default Vue.extend({
   },
   methods: {
     edit() {
-      console.log('我是编辑')
+      console.log('我是编辑1')
       // const vm = this;
       // vm.$store.commit("sidebar/setVisibility", true);
       // if (vm.$store.state.sidebar.selectedComponent !== "editor") {
